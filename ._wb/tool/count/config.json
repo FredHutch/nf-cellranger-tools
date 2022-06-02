@@ -1,0 +1,49 @@
+{
+    "$schema": "https://raw.githubusercontent.com/FredHutch/bash-workbench/main/docs/schema.json",
+    "name": "Cell Ranger Count",
+    "description": "Quantify single-cell gene expression",
+    "args": {
+        "output": {
+            "help": "Location for output files to be written",
+            "default": "./",
+            "wb_type": "folder"
+        },
+        "samplesheet": {
+            "help": "Sample sheet with a column containing the sample name (does not need to be unique)",
+            "required": true,
+            "wb_type": "file"
+        },
+        "sample_header": {
+            "help": "Header for the column in the sample sheet which contains the sample name",
+            "required": true,
+            "wb_type": "string"
+        },
+        "fastq_dir": {
+            "help": "Directory containing all FASTQ files",
+            "required": true,
+            "wb_type": "folder"
+        },
+        "transcriptome_dir": {
+            "help": "Directory containing transcriptome reference files",
+            "wb_type": "folder",
+            "default": "/shared/biodata/reference/10x/refdata-gex-GRCh38-2020-A"
+        },
+        "expect_cells": {
+            "help": "Expected number of cells per sample",
+            "wb_type": "integer",
+            "default": "10000"
+        },
+        "cpus": {
+            "help": "Number of CPUs to use for each task",
+            "default": "16",
+            "wb_type": "integer",
+            "wb_env": "TASK_CPUS"
+        },
+        "memory": {
+            "help": "Memory (RAM) to use for each task",
+            "default": "64.GB",
+            "wb_type": "string",
+            "wb_env": "TASK_MEM"
+        }
+    }
+}
