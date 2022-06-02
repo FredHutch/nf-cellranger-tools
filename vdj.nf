@@ -3,8 +3,8 @@
 // Enable DSL 2 syntax
 nextflow.enable.dsl = 2
 
-// Define the process used to run cellranger count
-process cellranger_count {
+// Define the process used to run cellranger vdj
+process cellranger_vdj {
     // Copy all output files to the folder specified by the user with --output
     publishDir "${params.output}/${sample}/", mode: 'copy', overwrite: true
 
@@ -21,8 +21,8 @@ process cellranger_count {
     path "*"
 
     script:
-    // Run the code defined in templates/count.sh
-    template "count.sh"
+    // Run the code defined in templates/vdj.sh
+    template "vdj.sh"
 }
 
 workflow {
@@ -47,9 +47,9 @@ workflow {
         error "Parameter 'fastq_dir' must be specified"
     }
 
-    // Check that the user specified the transcriptome_dir parameter
-    if("${params.transcriptome_dir}" == "false"){
-        error "Parameter 'transcriptome_dir' must be specified"
+    // Check that the user specified the vdj_dir parameter
+    if("${params.vdj_dir}" == "false"){
+        error "Parameter 'vdj_dir' must be specified"
     }
 
     // Get the list of samples from the appropriate column of the samplesheet
@@ -77,14 +77,14 @@ workflow {
         glob: false
     )
 
-    // Point to the reference transcriptome
+    // Point to the reference vdj
     ref_dir = file(
-        "${params.transcriptome_dir}",
+        "${params.vdj_dir}",
         checkIfExists: true,
         type: "dir",
         glob: false
     )
 
     // Analyze each sample independently
-    cellranger_count(sample_ch, fastq_dir, ref_dir)
+    cellranger_vdj(sample_ch, fastq_dir, ref_dir)
 }

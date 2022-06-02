@@ -40,6 +40,24 @@ The default transcriptome reference in the workflow is:
 
 - `/shared/biodata/reference/10x/refdata-gex-GRCh38-2020-A`
 
+### VDJ
+
+Docs: [Analysis of V(D)J data](https://support.10xgenomics.com/single-cell-vdj/software/pipelines/latest/tutorial/tutorial-vdj)
+
+#### Parameters
+
+  - `output`: Path for output files
+  - `samplesheet`: Sample sheet with a column containing the sample name (does not need to be unique)
+  - `sample_header`: Header for the column in the sample sheet which contains the sample name
+  - `fastq_dir`: Directory containing all FASTQ files
+  - `vdj_dir`: Directory containing VDJ reference files (see below)
+
+#### References
+
+The default VDJ reference in the workflow is:
+
+- `/shared/biodata/reference/10x/refdata-cellranger-vdj-GRCh38-alts-ensembl-5.0.0`
+
 ## Resource Allocation
 
 The amount of CPUs and memory available to each task can be customized with the parameters `-process.cpus` (default: 16) and `-process.memory` (default: `64.GB`)
