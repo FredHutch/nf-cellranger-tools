@@ -42,7 +42,7 @@ workflow {
         error "Parameter 'bcl_run_folder' must be specified"
     }
 
-    // Check that the user specified the bcl_run_folder parameter
+    // Check that the user specified the samplesheet parameter
     if("${params.samplesheet}" == "false"){
         error "Parameter 'samplesheet' must be specified"
     }
