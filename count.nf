@@ -12,9 +12,9 @@ process cellranger_count {
     // Run the process once per sample
     val sample
     // Stage the FASTQ folder (by symlink) in the working directory
-    path "FASTQ_DIR/"
+    path "FASTQ_DIR"
     // Stage the reference transcriptome (by symlink) in the working directory
-    path "REF/"
+    path "REF"
 
     output:
     // Capture any created files as outputs
