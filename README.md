@@ -61,3 +61,21 @@ The default VDJ reference in the workflow is:
 ## Resource Allocation
 
 The amount of CPUs and memory available to each task can be customized with the parameters `-process.cpus` (default: 16) and `-process.memory` (default: `64.GB`)
+
+## Testing
+
+The workflows in this repository may be tested by downloading example datasets hosted by
+10X and running the appropriate analyses locally.
+
+To download the example datasets and all necessary reference data, navigate to `test/`
+and run `download_inputs.sh`.
+
+Before running the tests, make sure that Nextflow is installed on your host system.
+
+NOTE: The CellRanger utility is sourced by default from an EasyBuild module which
+is assumed to be available on the host system (using `beforeScript = "ml CellRanger/6.1.1"`).
+If CellRanger is available from another source, it can be loaded for the testing suite
+by adding an appropriate configuration file (`nextflow.config`) to the working
+directory used for testing.
+
+To run tests, navigate to `test/` and run `bash run.sh`.
