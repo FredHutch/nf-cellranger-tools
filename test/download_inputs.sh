@@ -22,3 +22,18 @@ cd data/ref
     tar -zxvf refdata-gex-GRCh38-2020-A.tar.gz
 
 cd ../..
+
+# CellRanger vdj tool
+mkdir -p data/vdj
+cd data/vdj
+[ ! -s sc5p_v2_hs_B_1k_multi_5gex_b_Multiplex_fastqs.tar ] && \
+    curl -LO https://cf.10xgenomics.com/samples/cell-vdj/6.0.0/sc5p_v2_hs_B_1k_multi_5gex_b_Multiplex/sc5p_v2_hs_B_1k_multi_5gex_b_Multiplex_fastqs.tar && \
+    tar -xf sc5p_v2_hs_B_1k_multi_5gex_b_Multiplex_fastqs.tar
+cd ../..
+
+# V(D)J reference
+cd data/ref
+[ ! -s refdata-cellranger-vdj-GRCh38-alts-ensembl-5.0.0.tar.gz ] && \
+    curl -O https://cf.10xgenomics.com/supp/cell-vdj/refdata-cellranger-vdj-GRCh38-alts-ensembl-5.0.0.tar.gz && \
+    tar -xf refdata-cellranger-vdj-GRCh38-alts-ensembl-5.0.0.tar.gz
+cd ../..
