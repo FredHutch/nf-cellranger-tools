@@ -10,7 +10,7 @@ process multi_config {
     
     input:
     // The sample grouping CSV
-    path "samples.csv"
+    path "grouping.csv"
     // The optional multiplexing CSV
     path "multiplexing.csv"
 
@@ -40,6 +40,8 @@ process cellranger_multi {
     path "GEX_REF"
     // Stage the reference V(D)J (by symlink) in the working directory
     path "VDJ_REF"
+    // The feature reference CSV
+    path "feature.csv"
 
     output:
     // Capture any created files as outputs
@@ -61,6 +63,7 @@ workflow {
         transcriptome_dir: ${params.transcriptome_dir}
         vdj_dir:           ${params.vdj_dir}
         multiplexing:      ${params.multiplexing}
+        feature_csv:       ${params.feature_csv}
     """
 
     // Check that the user specified the output parameter
@@ -86,6 +89,11 @@ workflow {
     // Check that the user specified the vdj_dir parameter
     if("${params.vdj_dir}" == "false"){
         error "Parameter 'vdj_dir' must be specified"
+    }
+
+    // Check that the user specified the feature_csv parameter
+    if("${params.feature_csv}" == "false"){
+        error "Parameter 'feature_csv' must be specified"
     }
 
     // Point to the FASTQ directory
@@ -128,6 +136,14 @@ workflow {
         glob: false
     )
 
+    // Point to the feature reference CSV (which by default is an empty table in templates/)
+    feature_csv = file(
+        "${params.feature_csv}",
+        checkIfExists: true,
+        type: "file",
+        glob: false
+    )
+
     // Build the multi config CSV for each sample
     multi_config(grouping, multiplexing)
 
@@ -136,6 +152,7 @@ workflow {
         multi_config.out,
         fastq_dir,
         transcriptome_dir,
-        vdj_dir
+        vdj_dir,
+        feature_csv
     )
 }

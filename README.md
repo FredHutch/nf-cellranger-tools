@@ -83,11 +83,20 @@ Allowed values for `feature_types` are ([ref](https://support.10xgenomics.com/si
   - `VDJ`
   - `VDJ-T`
   - `VDJ-B`
-  - `Antibody Capture`
-  - `CRISPR Guide Capture`
+  - `Antibody Capture`     (see below)
+  - `CRISPR Guide Capture` (see below)
   - `Multiplexing Capture` (see below)
 
 >  Note that the sample grouping table must be provided in CSV format.
+
+####  Antibody or CRISPR Guide Capture
+
+When analyzing a sample using antibody capture or CRISPR guide capture,
+a feature reference CSV must be provided using the formation
+[described here](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/using/feature-bc-analysis#feature-ref).
+
+> Note that either antibody capture or CRISPR guide capture may be
+> analyzed, but not both at the same time.
 
 #### Multiplexing Capture
 
