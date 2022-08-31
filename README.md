@@ -56,6 +56,71 @@ The default VDJ reference in the workflow is:
 
 - `/shared/biodata/reference/10x/refdata-cellranger-vdj-GRCh38-alts-ensembl-5.0.0`
 
+### multi
+
+To analyze samples which have been prepared with multiple complementary methodologies, the flexible
+[`cellranger multi` analysis module](https://support.10xgenomics.com/single-cell-vdj/software/pipelines/latest/tutorial/tutorial-multi)
+is used.
+
+#### Sample Grouping
+
+To account for a wide variety of experimental designs, the `multi` workflow in this repository
+uses a simple input format which lists each of the different libraries in a single table
+alongside the methodology which was used to prepare it.
+
+For example, a single sample (`sc5p_v2_hs_B_1k`) may have been prepared in two
+parallel methods, both with 5' gene expression (`sc5p_v2_hs_B_1k_5gex`) and V(D)J
+(`sc5p_v2_hs_B_1k_b`).
+The sample grouping table describing this experimental design would be:
+
+| library | sample | feature_types |
+| ------- | ------ | ------------- |
+| sc5p_v2_hs_B_1k_5gex | sc5p_v2_hs_B_1k | Gene Expression |
+| sc5p_v2_hs_B_1k_b | sc5p_v2_hs_B_1k | VDJ |
+
+Allowed values for `feature_types` are ([ref](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/using/fastq-input-multi)):
+  - `Gene Expression`
+  - `VDJ`
+  - `VDJ-T`
+  - `VDJ-B`
+  - `Antibody Capture`
+  - `CRISPR Guide Capture`
+  - `Multiplexing Capture` (see below)
+
+>  Note that the sample grouping table must be provided in CSV format.
+
+#### Multiplexing Capture
+
+Optionally, if CMOs were used to multiplex samples in a single GEM the column `sample`
+would be omitted from the sample grouping table and a second table would be provided
+indicating the mapping of samples to Cell Multiplexing oligo IDs in this library.
+If multiple CMOs were used for a sample, separate IDs with a pipe (e.g., CMO301|CMO302).
+
+An example CMO mapping table would look like:
+
+| sample_id | cmo_ids | description |
+| --------- | ------- | ----------- |
+| Jurkat    | CMO301  | Jurkat      |
+| Raji      | CMO302  | Raji        |
+
+When using multiplexing capture, the sample grouping table must contain a
+library with the `feature_types` annotated as `Multiplexing Capture`, e.g.
+
+| library | feature_types |
+| ------- | ------------- |
+| sc5p_v2_hs_B_1k_5gex | Gene Expression      |
+| sc5p_v2_hs_B_1k_mux  | Multiplexing Capture |
+
+#### Parameters
+
+  - `output`: Path for output files
+  - `grouping`: Path to sample grouping CSV
+  - `fastq_dir`: Directory containing all FASTQ files
+  - `multiplexing`: Path to multiplexing capture table (optional)
+  - `transcriptome_dir`: Directory containing transcriptome reference files (optional)
+  - `vdj_dir`: Directory containing VDJ reference files (optional)
+  - `feature_csv`: Feature Reference CSV used for either Antibody Capture or CRISPR Guide Capture (optional)
+
 ## Resource Allocation
 
 The amount of CPUs and memory available to each task can be customized with the parameters `-process.cpus` (default: 16) and `-process.memory` (default: `64.GB`)
