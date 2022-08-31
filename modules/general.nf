@@ -1,5 +1,8 @@
 // Logic to get the list of samples from a list of files
 process parse_samples {
+    // Load the appropriate dependencies
+    label "python"
+
     input:
     path "files.txt"
 
@@ -55,6 +58,7 @@ workflow sample_list {
             header: false
         )
         .unique()
+        .flatten()
         .set { sample_ch }
 
     emit:

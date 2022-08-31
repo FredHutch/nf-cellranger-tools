@@ -26,7 +26,7 @@ run_cellranger_count(){
     
 }
 
-if [ ! -s run/count/pbmc_1k_v3/pbmc_1k_v3/outs/web_summary.html ]; then
+if [ ! -s run/count/pbmc_1k_v3/web_summary.html ]; then
     run_cellranger_count
 fi
 
@@ -54,6 +54,6 @@ run_cellranger_vdj(){
     
 }
 
-if [ ! -s run/vdj/sc5p_v2_hs_B_1k_b/sc5p_v2_hs_B_1k_b/outs/web_summary.html ]; then
+if [ ! -s run/vdj/sc5p_v2_hs_B_1k_b/web_summary.html ]; then
     run_cellranger_vdj
 fi

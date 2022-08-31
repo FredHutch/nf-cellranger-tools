@@ -116,10 +116,13 @@ library with the `feature_types` annotated as `Multiplexing Capture`, e.g.
   - `output`: Path for output files
   - `grouping`: Path to sample grouping CSV
   - `fastq_dir`: Directory containing all FASTQ files
+  - `transcriptome_dir`: Directory containing transcriptome reference files
+  - `vdj_dir`: Directory containing VDJ reference files
   - `multiplexing`: Path to multiplexing capture table (optional)
-  - `transcriptome_dir`: Directory containing transcriptome reference files (optional)
-  - `vdj_dir`: Directory containing VDJ reference files (optional)
   - `feature_csv`: Feature Reference CSV used for either Antibody Capture or CRISPR Guide Capture (optional)
+
+> Note that both `transcriptome_dir` and `vdj_dir` must always be specified, although the contents
+> will only be accessed if the corresponding sample type is provided
 
 ## Resource Allocation
 

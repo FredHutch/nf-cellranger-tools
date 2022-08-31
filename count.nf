@@ -8,8 +8,11 @@ include { sample_list } from './modules/general'
 
 // Define the process used to run cellranger count
 process cellranger_count {
+    // Load the appropriate dependencies
+    label "cellranger"
+
     // Copy all output files to the folder specified by the user with --output
-    publishDir "${params.output}/${sample}/", mode: 'copy', overwrite: true
+    publishDir "${params.output}/", mode: 'copy', overwrite: true
 
     input:
     // Run the process once per sample
@@ -20,8 +23,8 @@ process cellranger_count {
     path "REF"
 
     output:
-    // Capture any created files as outputs
-    path "*"
+    // Capture any created files in the output directory
+    path "outs/"
 
     script:
     // Run the code defined in templates/count.sh

@@ -5,6 +5,9 @@ nextflow.enable.dsl = 2
 
 // Define a process which takes two inputs
 process mkfastq {
+    // Load the appropriate dependencies
+    label "cellranger"
+
     // Copy all output files to the folder specified by the user with --output
     publishDir "${params.output}", mode: 'copy', overwrite: true
 
