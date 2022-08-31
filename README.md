@@ -28,8 +28,7 @@ Docs: [Single-Library Analysis with cellranger count](https://support.10xgenomic
 #### Parameters
 
   - `output`: Path for output files
-  - `samplesheet`: Sample sheet with a column containing the sample name (does not need to be unique)
-  - `sample_header`: Header for the column in the sample sheet which contains the sample name
+  - `sample_whitelist`: Optional text file used to specify the subset of samples to process, one per line (no header)
   - `fastq_dir`: Directory containing all FASTQ files
   - `transcriptome_dir`: Directory containing transcriptome reference files (see below)
   - `expect_cells`: Expected number of cells per sample (default: 10000)
@@ -47,8 +46,7 @@ Docs: [Analysis of V(D)J data](https://support.10xgenomics.com/single-cell-vdj/s
 #### Parameters
 
   - `output`: Path for output files
-  - `samplesheet`: Sample sheet with a column containing the sample name (does not need to be unique)
-  - `sample_header`: Header for the column in the sample sheet which contains the sample name
+  - `sample_whitelist`: Optional text file used to specify the subset of samples to process, one per line (no header)
   - `fastq_dir`: Directory containing all FASTQ files
   - `vdj_dir`: Directory containing VDJ reference files (see below)
 

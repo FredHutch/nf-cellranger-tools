@@ -3,6 +3,9 @@
 // Enable DSL 2 syntax
 nextflow.enable.dsl = 2
 
+// Import the process used to identify samples from the FASTQ files in a folder
+include { sample_list } from './modules/general'
+
 // Define the process used to run cellranger count
 process cellranger_count {
     // Copy all output files to the folder specified by the user with --output
@@ -27,19 +30,9 @@ process cellranger_count {
 
 workflow {
 
-    // Check that the user specified the samplesheet parameter
-    if("${params.samplesheet}" == "false"){
-        error "Parameter 'samplesheet' must be specified"
-    }
-    
     // Check that the user specified the output parameter
     if("${params.output}" == "false"){
         error "Parameter 'output' must be specified"
-    }
-
-    // Check that the user specified the sample_header parameter
-    if("${params.sample_header}" == "false"){
-        error "Parameter 'sample_header' must be specified"
     }
 
     // Check that the user specified the fastq_dir parameter
@@ -52,22 +45,8 @@ workflow {
         error "Parameter 'transcriptome_dir' must be specified"
     }
 
-    // Get the list of samples from the appropriate column of the samplesheet
-    Channel
-        .of(
-            file(
-                "${params.samplesheet}",
-                checkIfExists: true
-            )
-        )
-        .splitCsv(
-            header: true
-        )
-        .map {
-            row -> row["${params.sample_header}"]
-        }
-        .unique()
-        .set { sample_ch }
+    // Get the sample list either from the sample_whitelist or the fastq_dir
+    sample_list()
 
     // Point to the FASTQ directory
     fastq_dir = file(
@@ -86,5 +65,5 @@ workflow {
     )
 
     // Analyze each sample independently
-    cellranger_count(sample_ch, fastq_dir, ref_dir)
+    cellranger_count(sample_list.out, fastq_dir, ref_dir)
 }

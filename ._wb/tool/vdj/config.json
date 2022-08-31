@@ -8,15 +8,9 @@
             "default": "./",
             "wb_type": "folder"
         },
-        "samplesheet": {
-            "help": "Sample sheet with a column containing the sample name (does not need to be unique)",
-            "required": true,
+        "sample_whitelist": {
+            "help": "Optional file listing the subset of samples to process (no header, one sample name per line)",
             "wb_type": "file"
-        },
-        "sample_header": {
-            "help": "Header for the column in the sample sheet which contains the sample name",
-            "required": true,
-            "wb_type": "string"
         },
         "fastq_dir": {
             "help": "Directory containing all FASTQ files",
