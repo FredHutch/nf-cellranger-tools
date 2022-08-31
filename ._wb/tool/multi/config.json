@@ -1,0 +1,52 @@
+{
+    "$schema": "https://raw.githubusercontent.com/FredHutch/bash-workbench/main/docs/schema.json",
+    "name": "Cell Ranger Multi",
+    "description": "Jointly analyze multiple 10X assay types",
+    "args": {
+        "output": {
+            "help": "Location for output files to be written",
+            "default": "./",
+            "wb_type": "folder"
+        },
+        "grouping": {
+            "help": "Path to sample grouping CSV",
+            "required": true,
+            "wb_type": "file"
+        },
+        "fastq_dir": {
+            "help": "Directory containing all FASTQ files",
+            "required": true,
+            "wb_type": "folder"
+        },
+        "multiplexing": {
+            "help": "Path to multiplexing capture table (optional)",
+            "wb_type": "file"
+        },
+        "feature_csv": {
+            "help": "Feature Reference CSV used for either Antibody Capture or CRISPR Guide Capture (optional)",
+            "wb_type": "file"
+        },
+        "transcriptome_dir": {
+            "help": "Directory containing transcriptome reference files",
+            "wb_type": "folder",
+            "default": "/shared/biodata/reference/10x/refdata-gex-GRCh38-2020-A"
+        },
+        "vdj_dir": {
+            "help": "Directory containing V(D)J reference files",
+            "wb_type": "folder",
+            "default": "/shared/biodata/reference/10x/refdata-cellranger-vdj-GRCh38-alts-ensembl-5.0.0"
+        },
+        "cpus": {
+            "help": "Number of CPUs to use for each task",
+            "default": "16",
+            "wb_type": "integer",
+            "wb_env": "TASK_CPUS"
+        },
+        "memory": {
+            "help": "Memory (RAM) to use for each task",
+            "default": "64.GB",
+            "wb_type": "string",
+            "wb_env": "TASK_MEM"
+        }
+    }
+}
