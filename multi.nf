@@ -7,7 +7,11 @@ nextflow.enable.dsl = 2
 process multi_config {
     // Load the appropriate dependencies
     label "python"
-    
+
+    // Copy all output files to the folder specified by the user with --output
+    // in a subdirectory named 'config/'
+    publishDir "${params.output}/config/", mode: 'copy', overwrite: true
+
     input:
     // The sample grouping CSV
     path "grouping.csv"
@@ -147,12 +151,29 @@ workflow {
     // Build the multi config CSV for each sample
     multi_config(grouping, multiplexing)
 
-    // Analyze each sample independently
-    cellranger_multi(
-        multi_config.out,
-        fastq_dir,
-        transcriptome_dir,
-        vdj_dir,
-        feature_csv
-    )
+    // If the user set the `dryrun` parameter
+    if("${params.dryrun}" != "false"){
+        // Analyze each sample independently
+        cellranger_multi(
+            multi_config.out,
+            fastq_dir,
+            transcriptome_dir,
+            vdj_dir,
+            feature_csv
+        )
+    }else{
+        // Log the location of all output configs
+        multi_config
+            .out
+            .map { it -> it.name }
+            .toSortedList()
+            .view {
+                """
+                Multi config CSVs have been written to:
+                "${params.output}/config/"
+                ${it}
+                """
+            }
+    }
+
 }

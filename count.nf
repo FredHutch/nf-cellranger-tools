@@ -67,6 +67,15 @@ workflow {
         glob: false
     )
 
-    // Analyze each sample independently
-    cellranger_count(sample_list.out, fastq_dir, ref_dir)
+    // If the user set the `dryrun` parameter
+    if("${params.dryrun}" != "false"){
+        // Analyze each sample independently
+        cellranger_count(sample_list.out, fastq_dir, ref_dir)
+    }else{
+        // Log the samples which have been detected
+        sample_ch
+            .view {
+                "Sample: ${it}"
+            }
+    }
 }
