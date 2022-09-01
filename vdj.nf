@@ -70,10 +70,10 @@ workflow {
     // If the user set the `dryrun` parameter
     if("${params.dryrun}" != "false"){
         // Analyze each sample independently
-        cellranger_vdj(sample_ch, fastq_dir, ref_dir)
+        cellranger_vdj(sample_list.out, fastq_dir, ref_dir)
     }else{
         // Log the samples which have been detected
-        sample_ch
+        sample_list.out
             .view {
                 "Sample: ${it}"
             }
