@@ -202,8 +202,8 @@ os.mkdir("configs")
 
 validate_inputs(grouping, multiplexing)
 
-# If multiplexing was used
-if multiplexing.shape[0] > 0:
+# If multiplexing was not used
+if multiplexing.shape[0] == 0:
 
     # Build >=1 configs without CMOs
     build_sample_configs(grouping)
