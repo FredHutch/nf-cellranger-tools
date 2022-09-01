@@ -51,16 +51,47 @@ def validate_inputs(grouping, multiplexing):
 
     # multiplexing must have all three columns
     if multiplexing.shape[0] > 0:
-        for cname in ["sample_id", "cmo_ids", "description"]:
+        for cname in ["sample_id", "cmo_ids"]:
             assert cname in multiplexing.columns.values, f"Column {cname} is required in multiplexing table"
 
 
 class Config:
 
-    def __init__(self, sample_name):
+    def __init__(self, sample_name, grouping):
 
+        # The multi config CSV will be built as a list, and
+        # then concatenated and written out as a text file
         self.config = []
+
+        # Add the sample name to the object
         self.sample_name = sample_name
+
+        # Add the sample table to the object
+        self.grouping = grouping
+        
+        # Add the references
+        self.add_references()
+
+        # Add the libraries
+        self.add_libraries()
+
+    def add_references(self):
+        """
+        Parse the sample table and add the appropriate references
+        based on what feature types may be present
+        """
+
+        # GEX
+        if "Gene Expression" in self.grouping["feature_types"].values:
+            self.add_gex_ref()
+
+        # V(D)J
+        if self.grouping["feature_types"].isin(["VDJ", "VDJ-T", "VDJ-B"]).any():
+            self.add_vdj_ref()
+
+        # Antibody / CRISPR
+        if self.grouping["feature_types"].isin(["Antibody Capture", "CRISPR Guide Capture"]).any():
+            self.add_feature_ref()
 
     def add_section(self, header, content):
         self.config.append("\\n".join(["", header, content, ""]))
@@ -84,38 +115,8 @@ class Config:
     def add_feature_ref(self):
         self.add_section("[feature]", "reference,feature.csv")
 
-    def add_libraries(self, library_csv):
-        self.add_section("[libraries]", library_csv)
-
-
-def build_sample_configs(grouping):
-
-    # Build an independent sample configuration sheet for each sample
-    for sample, sample_df in grouping.groupby("sample"):
-
-        print("---")
-        print(f"Processing {sample}")
-        print("---")
-        print(sample_df)
-        print("---")
-
-        # Start building the config for this sample
-        config = Config()
-
-        # GEX
-        if "Gene Expression" in sample_df["feature_types"].values:
-            config.add_gex_ref()
-
-        # V(D)J
-        if sample_df["feature_types"].isin(["VDJ", "VDJ-T", "VDJ-B"]).any():
-            config.add_vdj_ref()
-
-        # Antibody / CRISPR
-        if sample_df["feature_types"].isin(["Antibody Capture", "CRISPR Guide Capture"]).any():
-            config.add_feature_ref()
-
-        # Add the libraries
-        libraries = sample_df.assign(
+    def add_libraries(self):
+        libraries = self.grouping.assign(
             fastqs="FASTQ_DIR"
         ).rename(
             columns=dict(
@@ -129,10 +130,58 @@ def build_sample_configs(grouping):
             ]
         ).to_csv(index=None)
 
-        config.add_libraries(libraries)
+        self.add_section("[libraries]", libraries)
+
+    def add_multiplexing(self, multiplexing):
+        """Add multiplexing information using CMOs."""
+
+        samples = multiplexing.reindex(
+            columns=[
+                "sample_id",
+                "cmo_ids"
+            ]
+        ).to_csv(index=None)
+
+        self.add_section("[samples]", samples)
+
+
+def build_sample_configs(grouping):
+
+    # Build an independent sample configuration sheet for each sample
+    for sample, sample_grouping in grouping.groupby("sample"):
+
+        print("---")
+        print(f"Processing {sample}")
+        print("---")
+        print(sample_grouping)
+        print("---")
+
+        # Start building the config for this sample
+        # Initialization will take care of setting up the appropriate references
+        # as well as the libraries
+        config = Config(sample, sample_grouping)
 
         # Write out
         config.write()
+
+
+def build_cmo_config(grouping, multiplexing):
+
+    print("---")
+    print("Building a config using CMOs")
+    print(grouping)
+    print(multiplexing)
+
+    # Start building the config for this sample
+    # Initialization will take care of setting up the appropriate references
+    # and the libraries
+    config = Config("multi", grouping)
+
+    # Add the CMO multiplexing information
+    config.add_multiplexing(multiplexing)
+
+    # Write out
+    config.write()
 
 # Read in the grouping CSV
 grouping = read_and_log(
@@ -154,4 +203,10 @@ validate_inputs(grouping, multiplexing)
 # If multiplexing was used
 if multiplexing.shape[0] > 0:
 
+    # Build >=1 configs without CMOs
     build_sample_configs(grouping)
+
+else:
+
+    # Build a single config with CMOs
+    build_cmo_config(grouping, multiplexing)

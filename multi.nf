@@ -20,7 +20,7 @@ process multi_config {
 
     output:
     // Capture any created configurations as outputs
-    path "configs/"
+    path "configs/*.csv"
 
     script:
     // Run the code defined in templates/multi_config.py

@@ -107,10 +107,10 @@ If multiple CMOs were used for a sample, separate IDs with a pipe (e.g., CMO301|
 
 An example CMO mapping table would look like:
 
-| sample_id | cmo_ids | description |
-| --------- | ------- | ----------- |
-| Jurkat    | CMO301  | Jurkat      |
-| Raji      | CMO302  | Raji        |
+| sample_id | cmo_ids |
+| --------- | ------- |
+| Jurkat    | CMO301  |
+| Raji      | CMO302  |
 
 When using multiplexing capture, the sample grouping table must contain a
 library with the `feature_types` annotated as `Multiplexing Capture`, e.g.
