@@ -28,4 +28,4 @@ run_cellranger_count(){
     
 }
 
-run_cellranger_count
+run_cellranger_count $1

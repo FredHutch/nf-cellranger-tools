@@ -19,4 +19,4 @@ run_cellranger_multi(){
     
 }
 
-run_cellranger_multi
+run_cellranger_multi $1

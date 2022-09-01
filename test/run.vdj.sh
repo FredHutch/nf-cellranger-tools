@@ -28,4 +28,4 @@ run_cellranger_vdj(){
     
 }
 
-run_cellranger_vdj
+run_cellranger_vdj $1
