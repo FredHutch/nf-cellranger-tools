@@ -17,6 +17,8 @@ def read_and_log(fp, allowed_cols=None):
         for cname in df.columns.values:
             assert cname in allowed_cols, f"Column name is not allowed: {cname} (must be one of {', '.join(allowed_cols)})"
 
+    return df
+
 def validate_inputs(grouping, multiplexing):
 
     # The `sample` column in `grouping` is mutually exclusive with `multiplexing`
