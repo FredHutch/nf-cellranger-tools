@@ -11,15 +11,17 @@ print(f"Reading in from {fp_in}")
 fp_out = f"{fp_in}.resolved.csv"
 print(f"Writing out to {fp_out}")
 
-def resolve(line, prefix="reference,"):
 
-    if not line.startswith(prefix):
-        return line
+def resolve(line, targets=["FASTQ_DIR", "GEX_REF", "VDJ_REF", "feature.csv"]):
 
-    path = line[len(prefix):].rstrip("\n")
-    path = os.path.abspath(path)
+    for target in targets:
 
-    return f"{prefix}{path}\n"
+        if target in line:
+
+            resolved_target = os.path.abspath(target)
+            print(f"Resolving {target} -> {resolved_target}")
+            return line.replace(target, resolved_target)
+
 
 with open(fp_in, "r") as handle_in, open(fp_out, "w") as handle_out:
 
