@@ -101,7 +101,7 @@ class Config:
     def write(self):
 
         # Make a single block of text
-        config_str = "\\n\\n".join(self.config)
+        config_str = "\\n".join(self.config)
         print(config_str)
         print("---")
 
