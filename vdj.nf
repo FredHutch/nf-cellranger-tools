@@ -24,7 +24,7 @@ process cellranger_vdj {
 
     output:
     // Capture any created files in the output directory
-    path "outs/"
+    path "*"
 
     script:
     // Run the code defined in templates/vdj.sh

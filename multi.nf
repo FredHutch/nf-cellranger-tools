@@ -45,7 +45,7 @@ process cellranger_multi {
 
     output:
     // Capture any created files as outputs
-    path "outs/"
+    path "*"
 
     script:
     // Run the code defined in templates/multi.sh
