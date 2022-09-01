@@ -10,7 +10,7 @@ process multi_config {
 
     // Copy all output files to the folder specified by the user with --output
     // in a subdirectory named 'config/'
-    publishDir "${params.output}/config/", mode: 'copy', overwrite: true
+    publishDir "${params.output}/", mode: 'copy', overwrite: true
 
     input:
     // The sample grouping CSV
@@ -170,7 +170,7 @@ workflow {
             .view {
                 """
                 Multi config CSVs have been written to:
-                "${params.output}/config/"
+                "${params.output}/configs/"
                 ${it}
                 """
             }
