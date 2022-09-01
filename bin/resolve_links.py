@@ -22,6 +22,8 @@ def resolve(line, targets=["FASTQ_DIR", "GEX_REF", "VDJ_REF", "feature.csv"]):
             print(f"Resolving {target} -> {resolved_target}")
             return line.replace(target, resolved_target)
 
+    return line
+
 
 with open(fp_in, "r") as handle_in, open(fp_out, "w") as handle_out:
 
