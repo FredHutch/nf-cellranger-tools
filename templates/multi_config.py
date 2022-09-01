@@ -96,7 +96,7 @@ class Config:
             self.add_feature_ref()
 
     def add_section(self, header, content):
-        self.config.append("\\n".join(["", header, content, ""]))
+        self.config.extend([f"[{header}]", content])
 
     def write(self):
 
@@ -109,13 +109,13 @@ class Config:
             handle.write(config_str)
 
     def add_gex_ref(self):
-        self.add_section("[gene-expression]", "reference,GEX_REF")
+        self.add_section("gene-expression", "reference,GEX_REF")
 
     def add_vdj_ref(self):
-        self.add_section("[vdj]", "reference,VDJ_REF")
+        self.add_section("vdj", "reference,VDJ_REF")
 
     def add_feature_ref(self):
-        self.add_section("[feature]", "reference,feature.csv")
+        self.add_section("feature", "reference,feature.csv")
 
     def add_libraries(self):
         libraries = self.grouping.assign(
@@ -132,7 +132,7 @@ class Config:
             ]
         ).to_csv(index=None)
 
-        self.add_section("[libraries]", libraries)
+        self.add_section("libraries", libraries)
 
     def add_multiplexing(self, multiplexing):
         """Add multiplexing information using CMOs."""
@@ -144,7 +144,7 @@ class Config:
             ]
         ).to_csv(index=None)
 
-        self.add_section("[samples]", samples)
+        self.add_section("samples", samples)
 
 
 def build_sample_configs(grouping):
