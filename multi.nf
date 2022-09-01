@@ -68,6 +68,7 @@ workflow {
         vdj_dir:           ${params.vdj_dir}
         multiplexing:      ${params.multiplexing}
         feature_csv:       ${params.feature_csv}
+        dryrun:            ${params.dryrun}
     """
 
     // Check that the user specified the output parameter
@@ -151,8 +152,8 @@ workflow {
     // Build the multi config CSV for each sample
     multi_config(grouping, multiplexing)
 
-    // If the user set the `dryrun` parameter
-    if("${params.dryrun}" != "false"){
+    // If the user has not set the `dryrun` parameter
+    if("${params.dryrun}" == "false"){
         // Analyze each sample independently
         cellranger_multi(
             multi_config.out,
