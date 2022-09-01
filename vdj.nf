@@ -33,6 +33,15 @@ process cellranger_vdj {
 
 workflow {
 
+    log.info"""
+    Parameters:
+
+        output:            ${params.output}
+        fastq_dir:         ${params.fastq_dir}
+        vdj_dir:           ${params.vdj_dir}
+        dryrun:            ${params.dryrun}
+    """
+
     // Check that the user specified the output parameter
     if("${params.output}" == "false"){
         error "Parameter 'output' must be specified"
@@ -67,8 +76,8 @@ workflow {
         glob: false
     )
 
-    // If the user set the `dryrun` parameter
-    if("${params.dryrun}" != "false"){
+    // If the user has not set the `dryrun` parameter
+    if("${params.dryrun}" == "false"){
         // Analyze each sample independently
         cellranger_vdj(sample_list.out, fastq_dir, ref_dir)
     }else{

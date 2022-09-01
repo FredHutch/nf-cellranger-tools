@@ -33,6 +33,15 @@ process cellranger_count {
 
 workflow {
 
+    log.info"""
+    Parameters:
+
+        output:            ${params.output}
+        fastq_dir:         ${params.fastq_dir}
+        transcriptome_dir: ${params.transcriptome_dir}
+        dryrun:            ${params.dryrun}
+    """
+
     // Check that the user specified the output parameter
     if("${params.output}" == "false"){
         error "Parameter 'output' must be specified"
@@ -67,8 +76,8 @@ workflow {
         glob: false
     )
 
-    // If the user set the `dryrun` parameter
-    if("${params.dryrun}" != "false"){
+    // If the user has not set the `dryrun` parameter
+    if("${params.dryrun}" == "false"){
         // Analyze each sample independently
         cellranger_count(sample_list.out, fastq_dir, ref_dir)
     }else{
