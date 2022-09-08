@@ -122,7 +122,7 @@ class Config:
             fastqs="FASTQ_DIR"
         ).rename(
             columns=dict(
-                library="fastq_id"
+                sample="fastq_id"
             )
         ).reindex(
             columns=[
