@@ -73,10 +73,10 @@ parallel methods, both with 5' gene expression (`sc5p_v2_hs_B_1k_5gex`) and V(D)
 (`sc5p_v2_hs_B_1k_b`).
 The sample grouping table describing this experimental design would be:
 
-| library | sample | feature_types |
-| ------- | ------ | ------------- |
+| sample               | grouping        | feature_types   |
+| -------------------- | --------------- | --------------- |
 | sc5p_v2_hs_B_1k_5gex | sc5p_v2_hs_B_1k | Gene Expression |
-| sc5p_v2_hs_B_1k_b | sc5p_v2_hs_B_1k | VDJ |
+| sc5p_v2_hs_B_1k_b    | sc5p_v2_hs_B_1k | VDJ             |
 
 Allowed values for `feature_types` are ([ref](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/using/fastq-input-multi)):
   - `Gene Expression`

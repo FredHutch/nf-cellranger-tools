@@ -21,16 +21,16 @@ def read_and_log(fp, allowed_cols=None):
 
 def validate_inputs(grouping, multiplexing):
 
-    # The `sample` column in `grouping` is mutually exclusive with `multiplexing`
-    if 'sample' in grouping.columns.values:
-        msg = "Cannot use 'sample' column if multiplexing with CMOs"
+    # The `grouping` column in `grouping` is mutually exclusive with `multiplexing`
+    if 'grouping' in grouping.columns.values:
+        msg = "Cannot use 'grouping' column if multiplexing with CMOs"
         assert multiplexing.shape[0] == 0, msg
     else:
-        msg = "Must use 'sample' column if not multiplexing with CMOs"
+        msg = "Must use 'grouping' column if not multiplexing with CMOs"
         assert multiplexing.shape[0] > 0, msg
 
-    # Both `library` and `feature_types` must be present in grouping
-    for cname in ['library', 'feature_types']:
+    # Both `sample` and `feature_types` must be present in grouping
+    for cname in ['sample', 'feature_types']:
         assert cname in grouping.columns.values, f"Grouping table must have a '{cname}' column"
 
     # The values in `feature_types` are controlled
@@ -149,11 +149,11 @@ class Config:
 
 def build_sample_configs(grouping):
 
-    # Build an independent sample configuration sheet for each sample
-    for sample, sample_grouping in grouping.groupby("sample"):
+    # Build an independent sample configuration sheet for each grouping
+    for sample, sample_grouping in grouping.groupby("grouping"):
 
         print("---")
-        print(f"Processing {sample}")
+        print(f"Processing grouping {grouping}")
         print("---")
         print(sample_grouping)
         print("---")
@@ -188,7 +188,7 @@ def build_cmo_config(grouping, multiplexing):
 # Read in the grouping CSV
 grouping = read_and_log(
     "grouping.csv",
-    allowed_cols=["library", "sample", "feature_types"]
+    allowed_cols=["sample", "grouping", "feature_types"]
 )
 
 # Read in the multiplexing CSV
