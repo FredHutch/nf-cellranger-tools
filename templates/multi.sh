@@ -10,6 +10,14 @@ echo "Resolving relative links in ${multi_config}"
 resolve_links.py "${multi_config}"
 cat "${multi_config}"
 
+echo "Contents of working directory:"
+tree -lah
+
+echo
+echo "Contents of the feature reference CSV:"
+cat feature.csv
+echo
+
 cellranger multi \
            --id="\${SAMPLE}" \
            --csv="\${CSV}.resolved.csv" \
