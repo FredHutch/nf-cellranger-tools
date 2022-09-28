@@ -63,6 +63,7 @@ workflow {
 
         output:            ${params.output}
         grouping:          ${params.grouping}
+        include_introns:   ${params.include_introns}
         fastq_dir:         ${params.fastq_dir}
         transcriptome_dir: ${params.transcriptome_dir}
         vdj_dir:           ${params.vdj_dir}
