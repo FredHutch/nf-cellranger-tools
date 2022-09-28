@@ -39,6 +39,7 @@ workflow {
         output:            ${params.output}
         fastq_dir:         ${params.fastq_dir}
         transcriptome_dir: ${params.transcriptome_dir}
+        include_introns:   ${params.include_introns}
         dryrun:            ${params.dryrun}
     """
 

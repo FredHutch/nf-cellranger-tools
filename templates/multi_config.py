@@ -110,6 +110,7 @@ class Config:
 
     def add_gex_ref(self):
         self.add_section("gene-expression", "reference,GEX_REF")
+        self.config.append("include-introns,${params.include_introns}")
 
     def add_vdj_ref(self):
         self.add_section("vdj", "reference,VDJ_REF")
