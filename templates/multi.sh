@@ -21,18 +21,18 @@ cellranger multi \
            --localcores=${task.cpus} \
            --localmem=${task.memory.toGiga()}
 
-if [ -d "$sample" ]; then
-    if [ -d "$sample/SC_MULTI_CS" ]; then
-        rm -r "$sample/SC_MULTI_CS"
+if [ -d "\$SAMPLE" ]; then
+    if [ -d "\$SAMPLE/SC_MULTI_CS" ]; then
+        rm -r "\$SAMPLE/SC_MULTI_CS"
     fi
 
-    if [ -d "$sample/outs" ]; then
-        mv "$sample/outs/*" "$sample/"
-        rmdir "$sample/outs"
+    if [ -d "\$SAMPLE/outs" ]; then
+        mv "\$SAMPLE/outs/*" "\$SAMPLE/"
+        rmdir "\$SAMPLE/outs"
     fi
 
     mkdir -p summary
-    if [ -s "$sample/per_sample_outs/$sample/web_summary.html" ]; then
-        cp "$sample/per_sample_outs/$sample/web_summary.html" "summary/$sample.html"
+    if [ -s "\$SAMPLE/per_sample_outs/\$SAMPLE/web_summary.html" ]; then
+        cp "\$SAMPLE/per_sample_outs/\$SAMPLE/web_summary.html" "summary/\$SAMPLE.html"
     fi
 fi
