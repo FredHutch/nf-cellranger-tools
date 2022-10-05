@@ -32,3 +32,14 @@ cellranger \
     "\${FLAGS}" \
     --localcores ${task.cpus} \
     --localmem ${task.memory.toGiga()}
+
+if [ -d "$sample" ]; then
+    if [ -d "$sample/MAKE_FASTQS_CS" ]; then
+        rm -r "$sample/MAKE_FASTQS_CS"
+    fi
+
+    if [ -d "$sample/outs" ]; then
+        mv "$sample/outs/*" "$sample/"
+        rmdir "$sample/outs"
+    fi
+fi
