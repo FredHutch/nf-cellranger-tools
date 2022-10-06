@@ -27,7 +27,7 @@ if [ -d "\$SAMPLE" ]; then
     fi
 
     if [ -d "\$SAMPLE/outs" ]; then
-        mv "\$SAMPLE/outs/*" "\$SAMPLE/"
+        mv "\$SAMPLE/outs/"* "\$SAMPLE/"
         rmdir "\$SAMPLE/outs"
     fi
 

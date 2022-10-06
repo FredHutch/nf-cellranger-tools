@@ -40,7 +40,7 @@ for sample in *; do
         fi
 
         if [ -d "\${sample}/outs" ]; then
-            mv "\${sample}/outs/*" "\${sample}/"
+            mv "\${sample}/outs/"* "\${sample}/"
             rmdir "\${sample}/outs"
         fi
     fi
