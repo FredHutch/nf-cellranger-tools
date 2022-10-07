@@ -2,14 +2,27 @@
 
 set -e
 
+# The user can specify the version of CellRanger which is run
+VERSION="${params.cellranger_version}"
+echo "Using CellRanger Version \$VERSION"
+
+# For older versions of CellRanger, the --include-introns flag should be
+# entirely omitted to set it as false. Only use the flag if it should be
+# set to true, or if the version is >=7.0.0
+if [ "${params.include_introns}" == "true" ] || [ \${VERSION:0:1}  == "7" ]; then
+    FLAG="--include-introns=${params.include_introns}"
+else
+    FLAG=""
+fi
+
 cellranger count \
            --id=${sample} \
            --transcriptome=REF/ \
            --fastqs=FASTQ_DIR/ \
            --sample=${sample} \
-           --include-introns=${params.include_introns} \
            --localcores=${task.cpus} \
-           --localmem=${task.memory.toGiga()}
+           --localmem=${task.memory.toGiga()} \
+           \$FLAG
 
 if [ -d "${sample}" ]; then
     if [ -d "${sample}/SC_RNA_COUNTER_CS" ]; then
