@@ -36,11 +36,12 @@ workflow {
     log.info"""
     Parameters:
 
-        output:            ${params.output}
-        fastq_dir:         ${params.fastq_dir}
-        transcriptome_dir: ${params.transcriptome_dir}
-        include_introns:   ${params.include_introns}
-        dryrun:            ${params.dryrun}
+        output:             ${params.output}
+        fastq_dir:          ${params.fastq_dir}
+        transcriptome_dir:  ${params.transcriptome_dir}
+        include_introns:    ${params.include_introns}
+        dryrun:             ${params.dryrun}
+        cellranger_version: ${params.cellranger_version}
     """
 
     // Check that the user specified the output parameter

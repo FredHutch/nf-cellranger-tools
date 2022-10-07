@@ -61,15 +61,16 @@ workflow {
     log.info"""
     Parameters:
 
-        output:            ${params.output}
-        grouping:          ${params.grouping}
-        include_introns:   ${params.include_introns}
-        fastq_dir:         ${params.fastq_dir}
-        transcriptome_dir: ${params.transcriptome_dir}
-        vdj_dir:           ${params.vdj_dir}
-        multiplexing:      ${params.multiplexing}
-        feature_csv:       ${params.feature_csv}
-        dryrun:            ${params.dryrun}
+        output:             ${params.output}
+        grouping:           ${params.grouping}
+        include_introns:    ${params.include_introns}
+        fastq_dir:          ${params.fastq_dir}
+        transcriptome_dir:  ${params.transcriptome_dir}
+        vdj_dir:            ${params.vdj_dir}
+        multiplexing:       ${params.multiplexing}
+        feature_csv:        ${params.feature_csv}
+        dryrun:             ${params.dryrun}
+        cellranger_version: ${params.cellranger_version}
     """
 
     // Check that the user specified the output parameter

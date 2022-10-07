@@ -36,10 +36,11 @@ workflow {
     log.info"""
     Parameters:
 
-        output:            ${params.output}
-        fastq_dir:         ${params.fastq_dir}
-        vdj_dir:           ${params.vdj_dir}
-        dryrun:            ${params.dryrun}
+        output:             ${params.output}
+        fastq_dir:          ${params.fastq_dir}
+        vdj_dir:            ${params.vdj_dir}
+        dryrun:             ${params.dryrun}
+        cellranger_version: ${params.cellranger_version}
     """
 
     // Check that the user specified the output parameter
