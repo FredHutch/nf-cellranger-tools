@@ -31,7 +31,6 @@ Docs: [Single-Library Analysis with cellranger count](https://support.10xgenomic
   - `sample_whitelist`: Optional text file used to specify the subset of samples to process, one per line (no header)
   - `fastq_dir`: Directory containing all FASTQ files
   - `transcriptome_dir`: Directory containing transcriptome reference files (see below)
-  - `expect_cells`: Expected number of cells per sample (default: 10000)
 
 #### References
 

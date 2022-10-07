@@ -22,11 +22,6 @@
             "wb_type": "folder",
             "default": "/shared/biodata/reference/10x/refdata-gex-GRCh38-2020-A"
         },
-        "expect_cells": {
-            "help": "Expected number of cells per sample",
-            "wb_type": "integer",
-            "default": "10000"
-        },
         "cpus": {
             "help": "Number of CPUs to use for each task",
             "default": "16",
