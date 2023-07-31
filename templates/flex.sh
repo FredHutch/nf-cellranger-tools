@@ -2,6 +2,13 @@
 
 set -e
 
+tree -lah
+
+echo "CellRanger Configuration"
+cat config.csv
+
+echo "Starting CellRanger"
+
 cellranger multi \
            --id="output" \
            --csv="config.csv" \
