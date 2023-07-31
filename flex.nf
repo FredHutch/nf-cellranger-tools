@@ -64,7 +64,6 @@ workflow {
         transcriptome_dir:  ${params.transcriptome_dir}
         samples:            ${params.samples}
         probe_barcodes:     ${params.probe_barcodes}
-        include_introns:    ${params.include_introns}
         dryrun:             ${params.dryrun}
         cellranger_version: ${params.cellranger_version}
     """

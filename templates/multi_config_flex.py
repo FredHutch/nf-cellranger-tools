@@ -54,8 +54,7 @@ class Config:
             "gene-expression",
             "\\n".join([
                 "reference,GEX_REF",
-                "probe-set,cellranger_probe_set.csv",
-                "include-introns,${params.include_introns}"
+                "probe-set,cellranger_probe_set.csv"
             ])
         )
 
