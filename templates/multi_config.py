@@ -6,6 +6,7 @@ import pandas as pd
 
 """Set up the multi config CSVs needed to run the cellranger multi tool."""
 
+
 def read_and_log(fp, allowed_cols=None):
 
     df = pd.read_csv(fp)
@@ -18,6 +19,7 @@ def read_and_log(fp, allowed_cols=None):
             assert cname in allowed_cols, f"Column name is not allowed: {cname} (must be one of {', '.join(allowed_cols)})"
 
     return df
+
 
 def validate_inputs(grouping, multiplexing):
 

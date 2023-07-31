@@ -12,7 +12,13 @@ fp_out = f"{fp_in}.resolved.csv"
 print(f"Writing out to {fp_out}")
 
 
-def resolve(line, targets=["FASTQ_DIR", "GEX_REF", "VDJ_REF", "feature.csv"]):
+def resolve(line, targets=[
+    "FASTQ_DIR",
+    "GEX_REF",
+    "VDJ_REF",
+    "feature.csv",
+    "cellranger_probe_set.csv"
+]):
 
     for target in targets:
 
