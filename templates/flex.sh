@@ -2,7 +2,8 @@
 
 set -e
 
-tree -lah
+ls -lah
+ls -lah *
 
 echo "CellRanger Configuration"
 cat config.csv
