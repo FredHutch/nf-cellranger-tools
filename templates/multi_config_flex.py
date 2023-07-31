@@ -52,7 +52,7 @@ class Config:
         # Path to references is hardcoded in the cellranger process
         self.add_section(
             "gene-expression",
-            "\n".join([
+            "\\n".join([
                 "reference,GEX_REF",
                 "probe-set,cellranger_probe_set.csv",
                 "include-introns,${params.include_introns}"
@@ -62,7 +62,7 @@ class Config:
     def add_samples(self, sample_list):
         self.add_section(
             "libraries",
-            "\n".join([
+            "\\n".join([
                 "fastq_id,fastqs,feature_types"
             ] + [
                 f"{sample_name},FASTQ_DIR,Gene Expression"
