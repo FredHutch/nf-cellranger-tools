@@ -36,7 +36,7 @@ class Config:
         self.config = []
 
     def add_section(self, header, content):
-        self.config.extend([f"[{header}]", content])
+        self.config.extend([f"[{header}]", content + "\\n"])
 
     def write(self):
 
@@ -91,14 +91,14 @@ def build_config(
     # Set up a config file
     config = Config()
 
+    # Add the references
+    config.add_references()
+
     # Add the sample names
     config.add_samples(samples["sample"].tolist())
 
     # Add the probe barcodes
     config.add_probe_barcodes(probe_barcodes)
-
-    # Add the references
-    config.add_references()
 
     # Write out
     config.write()
