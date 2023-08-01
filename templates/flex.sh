@@ -5,6 +5,9 @@ set -e
 ls -lah
 ls -lah *
 
+echo "Resolving relative links in config.csv"
+resolve_links.py config.csv
+
 echo "CellRanger Configuration"
 cat config.csv
 
