@@ -9,13 +9,13 @@ echo "Resolving relative links in config.csv"
 resolve_links.py config.csv
 
 echo "CellRanger Configuration"
-cat config.csv
+cat config.csv.resolved.csv
 
 echo "Starting CellRanger"
 
 cellranger multi \
            --id="output" \
-           --csv="config.csv" \
+           --csv="config.csv.resolved.csv" \
            --localcores=${task.cpus} \
            --localmem=${task.memory.toGiga() - 2}
 
