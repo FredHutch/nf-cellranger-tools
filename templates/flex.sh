@@ -34,3 +34,8 @@ if [ -d "output" ]; then
         cp "output/per_sample_outs/output/web_summary.html" "summary/output.html"
     fi
 fi
+
+# Clean up the version of the config with local paths
+rm config.csv.resolved.csv
+
+echo DONE
