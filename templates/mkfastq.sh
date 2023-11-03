@@ -24,7 +24,7 @@ if [[ "${params.project}" != "false" ]]; then
 fi
 
 # Run CellRanger mkfastq
-cellranger \
+${params.software} \
     mkfastq \
     --run "${bcl_run_folder}" \
     --${params.input_type} "${samplesheet}" \

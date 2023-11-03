@@ -28,6 +28,13 @@ process mkfastq {
 
 workflow {
 
+    // Check that --software is either cellranger or cellranger-arc
+    if("${params.software}" != "cellranger"){
+        if("${params.software}" != "cellranger-arc"){
+            error "Parameter software must be 'cellranger' or 'cellranger-arc'"
+        }
+    }
+
     // Check that input_type is either samplesheet or csv
     if("${params.input_type}" != "samplesheet"){
         if("${params.input_type}" != "csv"){
