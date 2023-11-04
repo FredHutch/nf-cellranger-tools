@@ -41,7 +41,7 @@ process cellranger_count_samplesheet {
 
     input:
     // Run the process once per sample
-    tuple val(sample), path("FASTQ_DIR/${sample}_S1_L00*_R1.fastq.gz"), path("FASTQ_DIR/${sample}_S1_L00*_R2.fastq.gz")
+    tuple val(sample), path("FASTQ_DIR/${sample}_S1_L00*_R1_001.fastq.gz"), path("FASTQ_DIR/${sample}_S1_L00*_R2_001.fastq.gz")
     // Stage the reference transcriptome (by symlink) in the working directory
     path "REF"
 

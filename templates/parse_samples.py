@@ -21,6 +21,7 @@ print("")
 files = [f for f in files if f.endswith(".fastq.gz")]
 print(f"Number ending with .fastq.gz: {len(files):,}")
 
+
 # Filter to those which match the pattern "*_S*_L**_R{1,2}_001.fastq.gz",
 # returning the sample name at the start of the string if it does match
 def matches_filter(fp):
@@ -49,7 +50,8 @@ def matches_filter(fp):
         return
 
     return fields[0]
-    
+
+
 def right_replace(fp, s, l=None):
     if not fp.endswith(s):
         return
