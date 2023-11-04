@@ -64,3 +64,24 @@ workflow sample_list {
     emit:
     sample_ch
 }
+
+workflow parse_samplesheet {
+    // Parse the set of files provided by the user from a samplesheet
+    Channel
+        .fromPath(
+            "${params.samplesheet}",
+            checkIfExists: true
+        )
+        .splitCsv(header: true)
+        .map { it -> [
+            it.sample,
+            file(it.fastq_1, checkIfExists: true),
+            file(it.fastq_2, checkIfExists: true)
+        ]}
+        .groupTuple()
+        .set { output_ch }
+
+    emit:
+    output_ch
+    
+}
