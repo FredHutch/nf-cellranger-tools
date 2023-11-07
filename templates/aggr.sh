@@ -33,3 +33,6 @@ if [ -d "${params.aggr_name}" ]; then
         cp "${params.aggr_name}/web_summary.html" "summary/${params.aggr_name}.html"
     fi
 fi
+
+echo "Annotating the dataset for each barcode"
+annotate_barcode_source.sh ${params.aggr_name}
