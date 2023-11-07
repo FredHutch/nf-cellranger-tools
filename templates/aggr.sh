@@ -16,7 +16,8 @@ cellranger aggr \
     --id=${params.aggr_name} \
     --csv=aggr.csv \
     --localcores=${task.cpus} \
-    --localmem=${task.memory.toGiga()}
+    --localmem=${task.memory.toGiga()} \
+    2>&1 | tee ${params.aggr_name}.log.txt
 
 if [ -d "${params.aggr_name}" ]; then
     if [ -d "${params.aggr_name}/SC_RNA_COUNTER_CS" ]; then

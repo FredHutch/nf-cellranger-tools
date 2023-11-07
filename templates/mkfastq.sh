@@ -31,7 +31,8 @@ ${params.software} \
     --barcode-mismatches ${params.barcode_mismatches} \
     "\${FLAGS}" \
     --localcores ${task.cpus} \
-    --localmem ${task.memory.toGiga()}
+    --localmem ${task.memory.toGiga()} \
+    2>&1 | tee log.txt
 
 for sample in *; do
     if [ -d "\${sample}" ]; then

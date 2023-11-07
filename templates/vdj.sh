@@ -8,7 +8,8 @@ cellranger vdj \
            --fastqs=FASTQ_DIR/ \
            --sample=$sample \
            --localcores=${task.cpus} \
-           --localmem=${task.memory.toGiga()}
+           --localmem=${task.memory.toGiga()} \
+    2>&1 | tee "${sample}.log.txt"
 
 if [ -d "${sample}" ]; then
     if [ -d "${sample}/SC_VDJ_ASSEMBLER_CS" ]; then

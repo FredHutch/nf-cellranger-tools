@@ -22,7 +22,8 @@ cellranger count \
            --sample=${sample} \
            --localcores=${task.cpus} \
            --localmem=${task.memory.toGiga()} \
-           \$FLAG
+           \$FLAG \
+    2>&1 | tee ${sample}.log.txt
 
 if [ -d "${sample}" ]; then
     if [ -d "${sample}/SC_RNA_COUNTER_CS" ]; then

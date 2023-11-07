@@ -19,7 +19,8 @@ cellranger multi \
            --id="\${SAMPLE}" \
            --csv="\${CSV}.resolved.csv" \
            --localcores=${task.cpus} \
-           --localmem=${task.memory.toGiga()}
+           --localmem=${task.memory.toGiga()} \
+    2>&1 | tee "\${SAMPLE}.log.txt"
 
 if [ -d "\$SAMPLE" ]; then
     if [ -d "\$SAMPLE/SC_MULTI_CS" ]; then
