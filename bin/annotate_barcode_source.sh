@@ -21,7 +21,7 @@ cat aggr.csv | while read sample_id molecule_h5; do
     let "ix=$ix + 1"
 
     # Write out the list of barcodes
-    $(find . -name h5dump) -N /barcodes "${molecule_h5}" | \
+    $(find / -name h5dump) -N /barcodes "${molecule_h5}" | \
         grep 000 | \
         sed 's/.* //' | \
         sed 's/\\.*//' | \
