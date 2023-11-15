@@ -14,7 +14,7 @@ process cellranger_arc_count {
     input:
     // Run the process once per sample
     // Stage input reads in the GEX_FASTQS and ATAC_FASTQS folders
-    tuple val(sample), path("GEX_FASTQS/${sample}_S1_L00*_R1_001.fastq.gz"), path("GEX_FASTQS/${sample}_S1_L00*_R2_001.fastq.gz"), path("ATAC_FASTQS/${sample}_S1_L00*_R1_001.fastq.gz"), path("ATAC_FASTQS/${sample}_S1_L00*_R2_001.fastq.gz")
+    tuple val(sample), path("GEX_FASTQS/"), path("ATAC_FASTQS/")
     // Stage the reference in the working directory
     path "REF"
 
@@ -69,10 +69,16 @@ workflow {
         )
         .splitCsv(header: true)
         .map { it -> [
-            it.sample,
-            it.fastq_type,
-            file(it.fastq_1, checkIfExists: true),
-            file(it.fastq_2, checkIfExists: true)
+            [
+                it.sample,
+                it.fastq_type,
+                file(it.fastq_1, checkIfExists: true)
+            ],
+            [
+                it.sample,
+                it.fastq_type,
+                file(it.fastq_2, checkIfExists: true)
+            ]
         ]}
         .groupTuple(by:[0, 1], sort: true)
         .branch {
@@ -83,10 +89,10 @@ workflow {
 
         
     long_ch.gex
-        .map { it -> [it[0], it[2], it[3]] }
+        .map { it -> [it[0], it[2]] }
         .join(
             long_ch.atac
-                .map { it -> [it[0], it[2], it[3]] }
+                .map { it -> [it[0], it[2]] }
         )
         .set { wide_ch }
 

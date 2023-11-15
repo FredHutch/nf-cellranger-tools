@@ -5,8 +5,8 @@ set -e
 # Set up the libraries CSV file, assuming that the inputs are in
 # two different folders
 echo """fastqs,sample,library_type
-GEX_FASTQS,${sample_name},Gene Expression
-ATAC_FASTQS,${sample_name},Chromatin Accessibility""" \
+GEX_FASTQS,,Gene Expression
+ATAC_FASTQS,,Chromatin Accessibility""" \
 > libraries.csv
 
 echo "Resolving relative links in libraries.csv"
