@@ -21,5 +21,5 @@ cellranger-arc count \
            --localmem=${task.memory.toGiga()} \
     2>&1 | tee "${sample_name}.log.txt"
 
-rm -rm GEX_FASTQS
-rm -rm ATAC_FASTQS
+rm -r GEX_FASTQS
+rm -r ATAC_FASTQS
