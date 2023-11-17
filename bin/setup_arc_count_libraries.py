@@ -6,7 +6,7 @@ from pathlib import Path
 
 
 def parse_samples(folder, library_type):
-    for file in Path(folder).glob(".fastq.gz"):
+    for file in Path(folder).glob("*.fastq.gz"):
         sample = parse_sample(file.name)
         yield dict(
             fastqs=folder,
