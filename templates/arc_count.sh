@@ -11,6 +11,7 @@ ATAC_FASTQS,,Chromatin Accessibility""" \
 
 echo "Resolving relative links in libraries.csv"
 resolve_links.py libraries.csv
+mv libraries.csv.resolved.csv libraries.resolved.csv
 cat libraries.resolved.csv
 
 cellranger-arc count \
