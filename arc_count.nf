@@ -68,7 +68,7 @@ workflow {
             checkIfExists: true
         )
         .splitCsv(header: true)
-        .map { it -> [
+        .flatMap { it -> [
             [
                 it.sample,
                 it.fastq_type,
