@@ -4,10 +4,9 @@ set -e
 
 # Set up the libraries CSV file, assuming that the inputs are in
 # two different folders
-echo """fastqs,sample,library_type
-GEX_FASTQS,,Gene Expression
-ATAC_FASTQS,,Chromatin Accessibility""" \
-> libraries.csv
+echo "Setting up libraries.csv"
+setup_arc_count_libraries.py
+cat libraries.csv
 
 echo "Resolving relative links in libraries.csv"
 resolve_links.py libraries.csv
