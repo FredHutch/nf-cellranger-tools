@@ -51,5 +51,6 @@ def remove_end_options(file_name: str, endings: List[str]) -> str:
         ]
         for row in parse_samples(folder, library_type)
     ])
+    .reindex(columns=["fastqs", "sample", "library_type"])
     .to_csv("libraries.csv", index=False)
 )
