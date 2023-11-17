@@ -20,3 +20,6 @@ cellranger-arc count \
            --localcores=${task.cpus} \
            --localmem=${task.memory.toGiga()} \
     2>&1 | tee "${sample_name}.log.txt"
+
+rm -rm GEX_FASTQS
+rm -rm ATAC_FASTQS
