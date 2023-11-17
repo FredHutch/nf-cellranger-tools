@@ -14,7 +14,7 @@ process cellranger_arc_count {
     input:
     // Run the process once per sample
     // Stage input reads in the GEX_FASTQS and ATAC_FASTQS folders
-    tuple val(sample), path("GEX_FASTQS/"), path("ATAC_FASTQS/")
+    tuple val(sample_name), path("GEX_FASTQS/"), path("ATAC_FASTQS/")
     // Stage the reference in the working directory
     path "REF"
 
