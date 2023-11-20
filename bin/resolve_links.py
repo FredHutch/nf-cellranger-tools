@@ -16,6 +16,8 @@ def resolve(line, targets=[
     "FASTQ_DIR",
     "GEX_REF",
     "VDJ_REF",
+    "GEX_FASTQS",
+    "ATAC_FASTQS",
     "feature.csv",
     "cellranger_probe_set.csv"
 ]):
