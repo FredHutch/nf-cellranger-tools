@@ -42,7 +42,7 @@ def format_gtf_line(header, seq):
         str(len(seq)),
         ".",
         "+",
-        "."
+        ".",
         f'gene_id "{header}"; transcript_id "{header}"; gene_name "{header}"; gene_biotype "protein_coding"'
     ])
 
