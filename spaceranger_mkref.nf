@@ -45,6 +45,7 @@ workflow {
             "${params.custom}".split(",").toList(),
             checkIfExists: true
         )
+        .toSortedList()
         .set { custom }
 
     merge(fasta, genes, custom)
