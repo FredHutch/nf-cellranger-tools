@@ -85,7 +85,8 @@ def parse_fasta(file: Path):
 def append(file_in, file_out, footer):
     with open(file_in, "r") as handle_in:
         with open(file_out, "w") as handle_out:
-            handle_out.write(handle_in.read())
+            for line in handle_in:
+                handle_out.write(line)
             handle_out.write(footer)
 
 
