@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import gzip
 import logging
 from pathlib import Path
 from typing import Dict
@@ -46,6 +47,13 @@ def format_gtf_line(header, seq):
     ])
 
 
+def safe_open(file: Path, mode: str):
+    if file.name.endswith(".gz"):
+        return gzip.open(file, mode)
+    else:
+        return open(file, mode)
+
+
 def parse_fasta(file: Path):
 
     if not file.exists():
@@ -57,7 +65,7 @@ def parse_fasta(file: Path):
     header = None
     seq = []
 
-    with open(file, "r") as handle:
+    with safe_open(file, "r") as handle:
         for line in handle:
             if line[0] == ">":
                 if header is not None and len(seq) > 0:
