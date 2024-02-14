@@ -36,10 +36,10 @@ def format_gtf(recs: Dict[str, str]):
 def format_gtf_line(header, seq):
     return "\t".join([
         header,
-        "unknown", 
+        "unknown",
         "exon",
-        1,
-        len(seq),
+        str(1),
+        str(len(seq)),
         ".",
         "+",
         "."
