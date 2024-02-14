@@ -15,7 +15,7 @@ process merge {
 
     output:
     tuple path("merged.fasta"), path("merged.gtf"), emit: seqs
-    path "probes.csv"
+    path "probes.csv", emit: probes
 
     """#!/bin/bash
 set -e
@@ -53,5 +53,6 @@ workflow {
         .set { custom }
 
     merge(fasta, genes, probes, custom)
-    mkref(merge.out)
+    mkref(merge.out.seqs)
+
 }
