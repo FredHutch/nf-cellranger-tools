@@ -23,7 +23,7 @@ spaceranger_merge.py
 
 process mkref {
     // Load the appropriate dependencies
-    label "cellranger"
+    label "spaceranger"
 
     publishDir "${params.output}", mode: 'copy', overwrite: true
 
