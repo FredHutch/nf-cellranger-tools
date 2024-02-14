@@ -47,6 +47,13 @@ def format_gtf_line(header, seq):
     ])
 
 
+def format_probes(recs: Dict[str, str]):
+    return "\n".join([
+        f"{header},{seq},{header},TRUE"
+        for header, seq in recs.items()
+    ])
+
+
 def safe_open(file: Path, mode: str):
     if file.name.endswith(".gz"):
         return gzip.open(file, mode)
@@ -103,6 +110,12 @@ def main():
         "input.gtf",
         "merged.gtf",
         format_gtf(custom)
+    )
+
+    append(
+        "input.csv",
+        "probes.csv",
+        format_probes(custom)
     )
 
 
