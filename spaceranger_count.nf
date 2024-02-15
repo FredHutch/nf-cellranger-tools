@@ -12,7 +12,7 @@ process count {
     publishDir "${params.output}", mode: 'copy', overwrite: true
 
     input:
-    tuple path(sample_name), path("fastqs/"), path(image)
+    tuple val(sample_name), path("fastqs/"), path(image)
     path "ref/"
     path "probes.csv"
 
