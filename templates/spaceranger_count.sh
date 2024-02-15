@@ -20,6 +20,6 @@ spaceranger count \
     --probe-set=probes.csv \
     --localcores=${task.cpus} \
     --localmem=${task.memory.toGiga()} \
-    $ARG \
+    \$ARG \
     --disable-ui \
     2>&1 | tee -a spaceranger_count.log.txt
