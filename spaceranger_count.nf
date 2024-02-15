@@ -12,7 +12,7 @@ process count {
     publishDir "${params.output}", mode: 'copy', overwrite: true
 
     input:
-    tuple val(sample_name), path("fastqs/"), path(image)
+    tuple val(sample_name), path("fastqs/"), path(image), val(slide), val(area)
     path "ref/"
     path "probes.csv"
 
@@ -45,7 +45,12 @@ workflow {
         .fromPath(params.image_manifest, checkIfExists: true)
         .splitCsv(header: true, sep: ",")
         .map  {
-            r -> [r["sample"], file(r["file"], checkIfExists: true)]
+            r -> [
+                r["sample"],
+                file(r["file"], checkIfExists: true),
+                r["slide"],
+                r["area"]
+            ]
         }
         .ifEmpty { error "No image manifest lines found" }
         .view()
