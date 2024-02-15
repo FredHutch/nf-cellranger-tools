@@ -9,7 +9,7 @@ process count {
     // Load the appropriate dependencies
     label "spaceranger"
 
-    publishDir "${params.output}", mode: 'copy', overwrite: true
+    publishDir "${params.output}", mode: 'copy', overwrite: true, pattern: "${sample_name}*"
 
     input:
     tuple val(sample_name), path("fastqs/"), path(image), val(slide), val(area)

@@ -22,4 +22,4 @@ spaceranger count \
     --localmem=${task.memory.toGiga()} \
     \$ARG \
     --disable-ui \
-    2>&1 | tee -a spaceranger_count.log.txt
+    2>&1 | tee -a ${sample_name}.log.txt
