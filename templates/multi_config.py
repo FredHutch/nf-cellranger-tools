@@ -61,6 +61,8 @@ def validate_inputs(grouping, multiplexing):
 
 class Config:
 
+    config: list
+
     def __init__(self, sample_name, grouping):
 
         # The multi config CSV will be built as a list, and
@@ -72,7 +74,7 @@ class Config:
 
         # Add the sample table to the object
         self.grouping = grouping
-        
+
         # Add the references
         self.add_references()
 
@@ -185,8 +187,15 @@ def build_cmo_config(grouping, multiplexing):
     # Add the CMO multiplexing information
     config.add_multiplexing(multiplexing)
 
+    # Add the CMO references
+    config.config.insert(
+        config.config.index("[gene-expression]") + 1,
+        "cmo-set,feature.csv"
+    )
+
     # Write out
     config.write()
+
 
 # Read in the grouping CSV
 grouping = read_and_log(
