@@ -62,7 +62,7 @@ class Config:
 
     config: list
 
-    def __init__(self, sample_name, grouping, probes):
+    def __init__(self, sample_name, grouping, probes: bool):
 
         # The multi config CSV will be built as a list, and
         # then concatenated and written out as a text file
@@ -74,7 +74,7 @@ class Config:
         # Add the sample table to the object
         self.grouping = grouping
 
-        # Add the probe set table to the object
+        # Add the boolean flag indicating whether probes are provided
         self.probes = probes
 
         # Add the references
@@ -94,7 +94,7 @@ class Config:
             self.add_gex_ref()
 
         # Probe set
-        if self.probes.shape[0] > 0:
+        if self.probes:
             self.add_probe_ref()
 
         # V(D)J
@@ -207,6 +207,12 @@ def build_cmo_config(grouping, multiplexing):
     config.write()
 
 
+def check_for_null(fp):
+    """Return True if the file contains more than just the string 'null'."""
+    with open(fp, "r") as handle:
+        return "null" not in handle.read(4)
+
+
 # Read in the grouping CSV
 grouping = read_and_log(
     "grouping.csv",
@@ -219,8 +225,8 @@ multiplexing = read_and_log(
     allowed_cols=["sample_id", "cmo_ids", "description"]
 )
 
-# Read in the optional probe set CSV
-probes = read_and_log("probes.csv")
+# Determine whether the user provided a probe set
+probes = check_for_null("probes.csv")
 
 # Create the output folder
 os.mkdir("configs")
