@@ -124,7 +124,6 @@ class Config:
 
     def add_probe_ref(self):
         self.config.append("probe-set,probes.csv")
-        self.config.append("create-bam,false")
 
     def add_vdj_ref(self):
         self.add_section("vdj", "reference,VDJ_REF")
