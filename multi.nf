@@ -17,6 +17,8 @@ process multi_config {
     path "grouping.csv"
     // The optional multiplexing CSV
     path "multiplexing.csv"
+    // The optional probe set CSV
+    path "probes.csv"
 
     output:
     // Capture any created configurations as outputs
@@ -46,6 +48,8 @@ process cellranger_multi {
     path "VDJ_REF"
     // The feature reference CSV
     path "feature.csv"
+    // The probe set CSV
+    path "probes.csv"
 
     output:
     // Capture any created files as outputs
@@ -69,6 +73,7 @@ workflow {
         vdj_dir:            ${params.vdj_dir}
         multiplexing:       ${params.multiplexing}
         feature_csv:        ${params.feature_csv}
+        probes_csv:         ${params.probes_csv}
         dryrun:             ${params.dryrun}
         cellranger_version: ${params.cellranger_version}
     """
@@ -101,6 +106,11 @@ workflow {
     // Check that the user specified the feature_csv parameter
     if("${params.feature_csv}" == "false"){
         error "Parameter 'feature_csv' must be specified"
+    }
+
+    // Check that the user specified the probes_csv parameter
+    if("${params.probes_csv}" == "false"){
+        error "Parameter 'probes_csv' must be specified"
     }
 
     // Point to the FASTQ directory
@@ -151,8 +161,16 @@ workflow {
         glob: false
     )
 
+    // Point to the probe set CSV (which by default is an empty table in templates/)
+    probes_csv = file(
+        "${params.probes_csv}",
+        checkIfExists: true,
+        type: "file",
+        glob: false
+    )
+
     // Build the multi config CSV for each sample
-    multi_config(grouping, multiplexing)
+    multi_config(grouping, multiplexing, probes_csv)
 
     // If the user has not set the `dryrun` parameter
     if("${params.dryrun}" == "false"){
@@ -162,7 +180,8 @@ workflow {
             fastq_dir,
             transcriptome_dir,
             vdj_dir,
-            feature_csv
+            feature_csv,
+            probes_csv
         )
     }else{
         // Log the location of all output configs

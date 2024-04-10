@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import os
-from tokenize import group
 import pandas as pd
 
 """Set up the multi config CSVs needed to run the cellranger multi tool."""
@@ -63,7 +62,7 @@ class Config:
 
     config: list
 
-    def __init__(self, sample_name, grouping):
+    def __init__(self, sample_name, grouping, probes):
 
         # The multi config CSV will be built as a list, and
         # then concatenated and written out as a text file
@@ -74,6 +73,9 @@ class Config:
 
         # Add the sample table to the object
         self.grouping = grouping
+
+        # Add the probe set table to the object
+        self.probes = probes
 
         # Add the references
         self.add_references()
@@ -90,6 +92,10 @@ class Config:
         # GEX
         if "Gene Expression" in self.grouping["feature_types"].values:
             self.add_gex_ref()
+
+        # Probe set
+        if self.probes.shape[0] > 0:
+            self.add_probe_ref()
 
         # V(D)J
         if self.grouping["feature_types"].isin(["VDJ", "VDJ-T", "VDJ-B"]).any():
@@ -115,6 +121,10 @@ class Config:
     def add_gex_ref(self):
         self.add_section("gene-expression", "reference,GEX_REF")
         self.config.append("include-introns,${params.include_introns}")
+
+    def add_probe_ref(self):
+        self.config.append("probe-set,probes.csv")
+        self.config.append("create-bam,false")
 
     def add_vdj_ref(self):
         self.add_section("vdj", "reference,VDJ_REF")
@@ -152,7 +162,7 @@ class Config:
         self.add_section("samples", samples)
 
 
-def build_sample_configs(grouping):
+def build_sample_configs(grouping, probes):
 
     # Build an independent sample configuration sheet for each grouping
     for sample, sample_grouping in grouping.groupby("grouping"):
@@ -166,7 +176,7 @@ def build_sample_configs(grouping):
         # Start building the config for this sample
         # Initialization will take care of setting up the appropriate references
         # as well as the libraries
-        config = Config(sample, sample_grouping)
+        config = Config(sample, sample_grouping, probes)
 
         # Write out
         config.write()
@@ -209,6 +219,9 @@ multiplexing = read_and_log(
     allowed_cols=["sample_id", "cmo_ids", "description"]
 )
 
+# Read in the optional probe set CSV
+probes = read_and_log("probes.csv")
+
 # Create the output folder
 os.mkdir("configs")
 
@@ -218,7 +231,7 @@ validate_inputs(grouping, multiplexing)
 if multiplexing.shape[0] == 0:
 
     # Build >=1 configs without CMOs
-    build_sample_configs(grouping)
+    build_sample_configs(grouping, probes)
 
 else:
 
