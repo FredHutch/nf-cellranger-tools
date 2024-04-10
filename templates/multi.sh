@@ -15,12 +15,20 @@ echo "Contents of the feature reference CSV:"
 cat feature.csv
 echo
 
+# If running v8 or higher, add the --create-bam=true flag
+if [[ "${cellranger_version}" =~ ^8.* ]]; then
+    BAM_FLAG="--create-bam=true"
+else
+    BAM_FLAG=""
+fi
+
 echo "Running cellranger multi" | tee "\${SAMPLE}.log.txt"
 cellranger multi \
-           --id="\${SAMPLE}" \
-           --csv="\${CSV}.resolved.csv" \
-           --localcores=${task.cpus} \
-           --localmem=${task.memory.toGiga()} \
+            --id="\${SAMPLE}" \
+            --csv="\${CSV}.resolved.csv" \
+            --localcores=${task.cpus} \
+            --localmem=${task.memory.toGiga()} \
+            \${BAM_FLAG} \
     2>&1 | tee "\${SAMPLE}.log.txt"
 
 echo "Finished running cellranger multi - " | tee "\${SAMPLE}.log.txt"
