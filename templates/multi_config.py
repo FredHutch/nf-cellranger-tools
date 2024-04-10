@@ -121,6 +121,8 @@ class Config:
     def add_gex_ref(self):
         self.add_section("gene-expression", "reference,GEX_REF")
         self.config.append("include-introns,${params.include_introns}")
+        if int("${params.cellranger_version}"[0]) > 7:
+            self.config.append("create-bam,true")
 
     def add_probe_ref(self):
         self.config.append("probe-set,probes.csv")
