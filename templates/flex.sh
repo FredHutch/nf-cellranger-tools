@@ -20,13 +20,14 @@ else
     BAM_FLAG=""
 fi
 
+cellranger --version 2>&1 | tee -a log.txt
 cellranger multi \
             --id="output" \
             --csv="config.csv.resolved.csv" \
             --localcores=${task.cpus} \
             --localmem=${task.memory.toGiga() - 2} \
             \${BAM_FLAG} \
-    2>&1 | tee log.txt
+    2>&1 | tee -a log.txt
 
 if [ -d "output" ]; then
     if [ -d "output/SC_MULTI_CS" ]; then

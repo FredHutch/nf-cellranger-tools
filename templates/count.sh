@@ -22,6 +22,7 @@ else
     BAM_FLAG=""
 fi
 
+cellranger count --version 2>&1 | tee ${sample}.log.txt
 cellranger count \
             --id=${sample} \
             --transcriptome=REF/ \
@@ -31,7 +32,7 @@ cellranger count \
             --localmem=${task.memory.toGiga()} \
             \$FLAG \
             \${BAM_FLAG} \
-    2>&1 | tee ${sample}.log.txt
+    2>&1 | tee -a ${sample}.log.txt
 
 if [ -d "${sample}" ]; then
     if [ -d "${sample}/SC_RNA_COUNTER_CS" ]; then

@@ -23,6 +23,7 @@ else
 fi
 
 echo "Running cellranger multi" | tee "\${SAMPLE}.log.txt"
+cellranger --version 2>&1 | tee -a "\${SAMPLE}.log.txt"
 cellranger multi \
             --id="\${SAMPLE}" \
             --csv="\${CSV}.resolved.csv" \
