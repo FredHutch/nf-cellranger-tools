@@ -22,7 +22,7 @@ else
     BAM_FLAG=""
 fi
 
-cellranger count --version 2>&1 | tee ${sample}.log.txt
+cellranger --version 2>&1 | tee ${sample}.log.txt
 cellranger count \
             --id=${sample} \
             --transcriptome=REF/ \
