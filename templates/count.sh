@@ -16,7 +16,7 @@ else
 fi
 
 # If running v8 or higher, add the --create-bam=true flag
-if [[ "${cellranger_version}" =~ ^8.* ]]; then
+if [[ "${params.cellranger_version}" =~ ^8.* ]]; then
     BAM_FLAG="--create-bam=true"
 else
     BAM_FLAG=""
