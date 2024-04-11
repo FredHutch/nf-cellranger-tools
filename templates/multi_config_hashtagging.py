@@ -229,9 +229,6 @@ multiplexing = read_and_log(
 # provided a feature_reference.csv which has > 0 lines
 has_feature_reference = pd.read_csv("feature_reference.csv").shape[0] > 0
 
-# Create the output folder
-os.mkdir("configs")
-
 validate_inputs(grouping, multiplexing)
 
 # Build config file(s)
