@@ -62,7 +62,7 @@ class Config:
 
     config: list
 
-    def __init__(self, sample_name, grouping, probes: bool):
+    def __init__(self, sample_name, grouping, probes: bool, probe_barcodes: pd.DataFrame):
 
         # The multi config CSV will be built as a list, and
         # then concatenated and written out as a text file
@@ -76,6 +76,9 @@ class Config:
 
         # Add the boolean flag indicating whether probes are provided
         self.probes = probes
+
+        # Add the optional probe barcodes table
+        self.probe_barcodes = probe_barcodes
 
         # Add the references
         self.add_references()
@@ -162,8 +165,22 @@ class Config:
 
         self.add_section("samples", samples)
 
+    def add_probe_barcodes(self):
+        self.add_section(
+            "samples",
+            self.probe_barcodes.reindex(
+                columns=[
+                    "sample_id",
+                    "probe_barcode_ids",
+                    "description"
+                ]
+            ).to_csv(
+                index=None
+            )
+        )
 
-def build_sample_configs(grouping, probes):
+
+def build_sample_configs(grouping, probes, probe_barcodes):
 
     # Build an independent sample configuration sheet for each grouping
     for sample, sample_grouping in grouping.groupby("grouping"):
@@ -177,7 +194,11 @@ def build_sample_configs(grouping, probes):
         # Start building the config for this sample
         # Initialization will take care of setting up the appropriate references
         # as well as the libraries
-        config = Config(sample, sample_grouping, probes)
+        config = Config(sample, sample_grouping, probes, probe_barcodes)
+
+        # If the user provided probe barcodes
+        if probe_barcodes.shape[0] > 0:
+            config.add_probe_barcodes()
 
         # Write out
         config.write()
@@ -229,6 +250,12 @@ multiplexing = read_and_log(
 # Determine whether the user provided a probe set
 probes = check_for_null("probes.csv")
 
+# Read in the probe barcodes CSV
+probe_barcodes = read_and_log(
+    "probe_barcodes.csv",
+    allowed_cols=["sample_id", "probe_barcode_ids", "description"]
+)
+
 # Create the output folder
 os.mkdir("configs")
 
@@ -238,7 +265,7 @@ validate_inputs(grouping, multiplexing)
 if multiplexing.shape[0] == 0:
 
     # Build >=1 configs without CMOs
-    build_sample_configs(grouping, probes)
+    build_sample_configs(grouping, probes, probe_barcodes)
 
 else:
 

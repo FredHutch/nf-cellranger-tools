@@ -19,6 +19,8 @@ process multi_config {
     path "multiplexing.csv"
     // The optional probe set CSV
     path "probes.csv"
+    // The optional probe barcodes CSV
+    path "probe_barcodes.csv"
 
     output:
     // Capture any created configurations as outputs
@@ -74,6 +76,7 @@ workflow {
         multiplexing:       ${params.multiplexing}
         feature_csv:        ${params.feature_csv}
         probes_csv:         ${params.probes_csv}
+        probe_barcodes:     ${params.probe_barcodes}
         dryrun:             ${params.dryrun}
         cellranger_version: ${params.cellranger_version}
     """
@@ -111,6 +114,11 @@ workflow {
     // Check that the user specified the probes_csv parameter
     if("${params.probes_csv}" == "false"){
         error "Parameter 'probes_csv' must be specified"
+    }
+
+    // Check that the user specified the probe_barcodes parameter
+    if("${params.probe_barcodes}" == "false"){
+        error "Parameter 'probe_barcodes' must be specified"
     }
 
     // Point to the FASTQ directory
@@ -169,8 +177,16 @@ workflow {
         glob: false
     )
 
+    // Point to the probe barcodes CSV (which by default is an empty table in templates/)
+    probe_barcodes = file(
+        "${params.probe_barcodes}",
+        checkIfExists: true,
+        type: "file",
+        glob: false
+    )
+
     // Build the multi config CSV for each sample
-    multi_config(grouping, multiplexing, probes_csv)
+    multi_config(grouping, multiplexing, probes_csv, probe_barcodes)
 
     // If the user has not set the `dryrun` parameter
     if("${params.dryrun}" == "false"){
