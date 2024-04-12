@@ -40,7 +40,7 @@ if [ -d "demultiplexed_samples" ]; then
     # Move the per-sample BAM files to the top level directory
     for sample in demultiplexed_samples/per_sample_outs/*; do
         BAM=\$sample/count/sample_alignments.bam
-        if [ - s "\$BAM" ]; then
+        if [ -s "\$BAM" ]; then
             DEST=demultiplexed_samples/\${sample##*/}.bam
             echo Moving BAM file from \$sample/count/sample_alignments.bam to \$DEST | tee -a "demultiplexed_samples.log.txt"
             mv "\$BAM" "\$DEST"
