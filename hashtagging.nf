@@ -63,7 +63,7 @@ process demux_hashtags {
 // Convert the BAM file for each sample into FASTQs
 process bam_to_fastq {
     // Load the appropriate dependencies
-    label "cellranger"
+    label "bamtofastq"
     
     // Copy all output files to the folder specified by the user with --output
     publishDir "${params.output}/", mode: 'copy', overwrite: true
