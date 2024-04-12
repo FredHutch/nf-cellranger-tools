@@ -22,16 +22,8 @@ def read_and_log(fp, allowed_cols=None):
 
 def validate_inputs(grouping, multiplexing):
 
-    # The `grouping` column in `grouping` is mutually exclusive with `multiplexing`
-    if 'grouping' in grouping.columns.values:
-        msg = "Cannot use 'grouping' column if multiplexing with CMOs"
-        assert multiplexing.shape[0] == 0, msg
-    else:
-        msg = "Must use 'grouping' column if not multiplexing with CMOs"
-        assert multiplexing.shape[0] > 0, msg
-
-    # Both `sample` and `feature_types` must be present in grouping
-    for cname in ['sample', 'feature_types']:
+    # Both `fastq_id` and `feature_types` must be present in grouping
+    for cname in ['fastq_id', 'feature_types']:
         assert cname in grouping.columns.values, f"Grouping table must have a '{cname}' column"
 
     # The values in `feature_types` are controlled
@@ -52,7 +44,12 @@ def validate_inputs(grouping, multiplexing):
 
     assert len(invalid_feature_types) == 0, f"Invalid: {', '.join(invalid_feature_types)}"
 
-    # multiplexing must have all three columns
+    # At a minimum, Gene Expression and Multiplexing Capture must be present
+    for cname in ["Gene Expression", "Multiplexing Capture"]:
+        msg = f"Column {cname} is required in grouping table"
+        assert cname in grouping["feature_types"].values, msg
+
+    # multiplexing must have two required columns
     if multiplexing.shape[0] > 0:
         for cname in ["sample_id", "cmo_ids"]:
             assert cname in multiplexing.columns.values, f"Column {cname} is required in multiplexing table"
@@ -62,23 +59,15 @@ class Config:
 
     config: list
 
-    def __init__(self, sample_name, grouping, probes: bool, probe_barcodes: pd.DataFrame):
+    def __init__(self, grouping):
 
         # The multi config CSV will be built as a list, and
         # then concatenated and written out as a text file
         self.config = []
 
-        # Add the sample name to the object
-        self.sample_name = sample_name
-
-        # Add the sample table to the object
+        # Add the table describing which types of data are present
+        # from which sequencing libraries
         self.grouping = grouping
-
-        # Add the boolean flag indicating whether probes are provided
-        self.probes = probes
-
-        # Add the optional probe barcodes table
-        self.probe_barcodes = probe_barcodes
 
         # Add the references
         self.add_references()
@@ -96,10 +85,6 @@ class Config:
         if "Gene Expression" in self.grouping["feature_types"].values:
             self.add_gex_ref()
 
-        # Probe set
-        if self.probes:
-            self.add_probe_ref()
-
         # V(D)J
         if self.grouping["feature_types"].isin(["VDJ", "VDJ-T", "VDJ-B"]).any():
             self.add_vdj_ref()
@@ -111,24 +96,24 @@ class Config:
     def add_section(self, header, content):
         self.config.extend([f"[{header}]", content])
 
-    def write(self):
+    def write(self, fp):
 
         # Make a single block of text
         config_str = "\\n".join(self.config)
         print(config_str)
         print("---")
 
-        with open(f"configs/{self.sample_name}.csv", "w") as handle:
+        with open(fp, "w") as handle:
             handle.write(config_str)
 
     def add_gex_ref(self):
         self.add_section("gene-expression", "reference,GEX_REF")
+        if "Multiplexing Capture" in self.grouping["feature_types"].values:
+            self.config.append("cmo-set,hashtags.csv")
+
         self.config.append("include-introns,${params.include_introns}")
         if int("${params.cellranger_version}"[0]) > 7:
             self.config.append("create-bam,true")
-
-    def add_probe_ref(self):
-        self.config.append("probe-set,probes.csv")
 
     def add_vdj_ref(self):
         self.add_section("vdj", "reference,VDJ_REF")
@@ -137,19 +122,7 @@ class Config:
         self.add_section("feature", "reference,feature.csv")
 
     def add_libraries(self):
-        libraries = self.grouping.assign(
-            fastqs="FASTQ_DIR"
-        ).rename(
-            columns=dict(
-                sample="fastq_id"
-            )
-        ).reindex(
-            columns=[
-                "fastq_id",
-                "fastqs",
-                "feature_types"
-            ]
-        ).to_csv(index=None)
+        libraries = self.grouping.to_csv(index=None)
 
         self.add_section("libraries", libraries)
 
@@ -165,68 +138,65 @@ class Config:
 
         self.add_section("samples", samples)
 
-    def add_probe_barcodes(self):
-        self.add_section(
-            "samples",
-            self.probe_barcodes.reindex(
-                columns=[
-                    "sample_id",
-                    "probe_barcode_ids",
-                    "description"
-                ]
-            ).to_csv(
-                index=None
-            )
+
+def build_sample_configs(
+    grouping: pd.DataFrame,
+    multiplexing: pd.DataFrame,
+    has_feature_reference: bool
+):
+
+    # Make a config to drive the dumultiplexing of hashtags
+    # This only uses gene expression and multiplexing capture FASTQs
+    config = Config(
+        (
+            grouping
+            .loc[
+                grouping["feature_types"].isin(["Gene Expression", "Multiplexing Capture"])
+            ]
+            # Always list the gene expression library first
+            .sort_values(by="feature_types")
         )
-
-
-def build_sample_configs(grouping, probes, probe_barcodes):
-
-    # Build an independent sample configuration sheet for each grouping
-    for sample, sample_grouping in grouping.groupby("grouping"):
-
-        print("---")
-        print(f"Processing grouping {grouping}")
-        print("---")
-        print(sample_grouping)
-        print("---")
-
-        # Start building the config for this sample
-        # Initialization will take care of setting up the appropriate references
-        # as well as the libraries
-        config = Config(sample, sample_grouping, probes, probe_barcodes)
-
-        # If the user provided probe barcodes
-        if probe_barcodes.shape[0] > 0:
-            config.add_probe_barcodes()
-
-        # Write out
-        config.write()
-
-
-def build_cmo_config(grouping, multiplexing):
-
-    print("---")
-    print("Building a config using CMOs")
-    print(grouping)
-    print(multiplexing)
-
-    # Start building the config for this sample
-    # Initialization will take care of setting up the appropriate references
-    # and the libraries
-    config = Config("multi", grouping)
-
-    # Add the CMO multiplexing information
+    )
+    # Add the multiplexing to this config
     config.add_multiplexing(multiplexing)
 
-    # Add the CMO references
-    config.config.insert(
-        config.config.index("[gene-expression]") + 1,
-        "cmo-set,feature.csv"
-    )
-
     # Write out
-    config.write()
+    config.write("demux.config.csv")
+
+    # Make a config which can be used in the step after demultiplexing
+
+    # If the user provided a feature reference, use the "Multiplexing Capture" data
+    # as Antibody Capture
+    if has_feature_reference:
+        grouping = grouping.replace({
+            "feature_types": {
+                "Multiplexing Capture": "Antibody Capture"
+            }
+        })
+
+    # If there is any data beyond the gene expression and multiplexing capture
+    if (
+        grouping
+        .query("feature_types != 'Gene Expression'")
+        .query("feature_types != 'Multiplexing Capture'")
+        .shape[0] > 0
+    ):
+        # Change the name of the GEX library to bamtofastq
+        grouping = grouping.query("feature_types != 'Gene Expression'")
+        grouping = pd.concat([
+            grouping,
+            pd.DataFrame([{
+                "fastq_id": "bamtofastq",
+                "fastqs": "DEMUX_DIR",
+                "feature_types": "Gene Expression"
+            }])
+        ])
+
+        # Set up that config file
+        config = Config(grouping)
+
+        # Write out to a different file
+        config.write("post_demux.config.csv")
 
 
 def check_for_null(fp):
@@ -241,33 +211,25 @@ grouping = read_and_log(
     allowed_cols=["sample", "grouping", "feature_types"]
 )
 
+# Reformat the grouping table
+grouping = (
+    grouping
+    .assign(fastqs="FASTQ_DIR")
+    .rename(columns=dict(sample="fastq_id"))
+    .reindex(columns=["fastq_id", "fastqs", "feature_types"])
+)
+
 # Read in the multiplexing CSV
 multiplexing = read_and_log(
     "multiplexing.csv",
     allowed_cols=["sample_id", "cmo_ids", "description"]
 )
 
-# Determine whether the user provided a probe set
-probes = check_for_null("probes.csv")
-
-# Read in the probe barcodes CSV
-probe_barcodes = read_and_log(
-    "probe_barcodes.csv",
-    allowed_cols=["sample_id", "probe_barcode_ids", "description"]
-)
-
-# Create the output folder
-os.mkdir("configs")
+# Set up a boolean flag indicating whether the user
+# provided a feature_reference.csv which has > 0 lines
+has_feature_reference = pd.read_csv("feature_reference.csv").shape[0] > 0
 
 validate_inputs(grouping, multiplexing)
 
-# If multiplexing was not used
-if multiplexing.shape[0] == 0:
-
-    # Build >=1 configs without CMOs
-    build_sample_configs(grouping, probes, probe_barcodes)
-
-else:
-
-    # Build a single config with CMOs
-    build_cmo_config(grouping, multiplexing)
+# Build config file(s)
+build_sample_configs(grouping, multiplexing, has_feature_reference)

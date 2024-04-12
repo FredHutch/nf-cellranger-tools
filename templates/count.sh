@@ -15,15 +15,24 @@ else
     FLAG=""
 fi
 
+# If running v8 or higher, add the --create-bam=true flag
+if [[ "${params.cellranger_version}" =~ ^8.* ]]; then
+    BAM_FLAG="--create-bam=true"
+else
+    BAM_FLAG=""
+fi
+
+cellranger --version 2>&1 | tee ${sample}.log.txt
 cellranger count \
-           --id=${sample} \
-           --transcriptome=REF/ \
-           --fastqs=FASTQ_DIR/ \
-           --sample=${sample} \
-           --localcores=${task.cpus} \
-           --localmem=${task.memory.toGiga()} \
-           \$FLAG \
-    2>&1 | tee ${sample}.log.txt
+            --id=${sample} \
+            --transcriptome=REF/ \
+            --fastqs=FASTQ_DIR/ \
+            --sample=${sample} \
+            --localcores=${task.cpus} \
+            --localmem=${task.memory.toGiga()} \
+            \$FLAG \
+            \${BAM_FLAG} \
+    2>&1 | tee -a ${sample}.log.txt
 
 if [ -d "${sample}" ]; then
     if [ -d "${sample}/SC_RNA_COUNTER_CS" ]; then

@@ -13,13 +13,14 @@ resolve_links.py libraries.csv
 mv libraries.csv.resolved.csv libraries.resolved.csv
 cat libraries.resolved.csv
 
+cellranger-arc --version 2>&1 | tee -a "${sample_name}.log.txt"
 cellranger-arc count \
            --id="${sample_name}" \
            --reference="\$PWD/REF" \
            --libraries=libraries.resolved.csv \
            --localcores=${task.cpus} \
            --localmem=${task.memory.toGiga()} \
-    2>&1 | tee "${sample_name}.log.txt"
+    2>&1 | tee -a "${sample_name}.log.txt"
 
 rm -r GEX_FASTQS
 rm -r ATAC_FASTQS

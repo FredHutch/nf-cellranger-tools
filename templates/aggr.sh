@@ -12,12 +12,13 @@ make_aggr_samplesheet.py
 echo "Inputs for cellranger aggr:"
 cat aggr.csv
 
+cellranger --version 2>&1 | tee -a ${params.aggr_name}.log.txt
 cellranger aggr \
     --id=${params.aggr_name} \
     --csv=aggr.csv \
     --localcores=${task.cpus} \
     --localmem=${task.memory.toGiga()} \
-    2>&1 | tee ${params.aggr_name}.log.txt
+    2>&1 | tee -a ${params.aggr_name}.log.txt
 
 if [ -d "${params.aggr_name}" ]; then
     if [ -d "${params.aggr_name}/SC_RNA_COUNTER_CS" ]; then
