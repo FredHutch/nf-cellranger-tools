@@ -44,6 +44,7 @@ if [ -d "demultiplexed_samples" ]; then
             DEST=demultiplexed_samples/\${sample##*/}.bam
             echo Moving BAM file from \$sample/count/sample_alignments.bam to \$DEST | tee -a "demultiplexed_samples.log.txt"
             mv "\$BAM" "\$DEST"
+            mv "\${BAM}.bai" "\${DEST}.bai"
         fi
     done
 
