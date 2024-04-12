@@ -20,7 +20,8 @@ def resolve(line, targets=[
     "ATAC_FASTQS",
     "feature.csv",
     "cellranger_probe_set.csv",
-    "probes.csv"
+    "probes.csv",
+    "hashtags.csv"
 ]):
 
     for target in targets:
