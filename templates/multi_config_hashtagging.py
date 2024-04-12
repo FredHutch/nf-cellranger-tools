@@ -185,11 +185,11 @@ def build_sample_configs(
         grouping = grouping.query("feature_types != 'Gene Expression'")
         grouping = pd.concat([
             grouping,
-            pd.DataFrame({
+            pd.DataFrame([{
                 "fastq_id": "bamtofastq",
                 "fastqs": "DEMUX_DIR",
                 "feature_types": "Gene Expression"
-            })
+            }])
         ])
 
         # Set up that config file
