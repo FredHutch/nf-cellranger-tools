@@ -14,6 +14,7 @@ print(f"Writing out to {fp_out}")
 
 def resolve(line, targets=[
     "FASTQ_DIR",
+    "DEMUX_DIR",
     "GEX_REF",
     "VDJ_REF",
     "GEX_FASTQS",
