@@ -110,6 +110,8 @@ class Config:
         self.add_section("gene-expression", "reference,GEX_REF")
         if "Multiplexing Capture" in self.grouping["feature_types"].values:
             self.config.append("cmo-set,hashtags.csv")
+        else:
+            self.config.append("check-library-compatibility,false")
 
         self.config.append("include-introns,${params.include_introns}")
         if int("${params.cellranger_version}"[0]) > 7:
