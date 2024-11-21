@@ -192,7 +192,7 @@ workflow {
     if("${params.dryrun}" == "false"){
         // Analyze each sample independently
         cellranger_multi(
-            multi_config.out,
+            multi_config.out.flatten(),
             fastq_dir,
             transcriptome_dir,
             vdj_dir,
@@ -203,6 +203,7 @@ workflow {
         // Log the location of all output configs
         multi_config
             .out
+            .flatten()
             .map { it -> it.name }
             .toSortedList()
             .view {
